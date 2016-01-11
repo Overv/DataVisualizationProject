@@ -74,6 +74,10 @@ function updatePositions(data) {
 function showPlayerStats(tagid) {
     // TODO
     //d3.select("svg.parent").selectAll("*").remove();
+    d3.select("#stats").remove();
+    d3.select("body")
+       .append("div")
+       .attr("id","stats");
     var margin = {top:20, right:20, bottom:30, left:50},
         width=600 - margin.left-margin.right,
         height=300 - margin.top - margin.bottom;
@@ -126,10 +130,12 @@ function showPlayerStats(tagid) {
     yStatScale.domain(d3.extent(playerData,function(d) {return d[1]}));
 
     lineSvg.append("g")
+            .attr("class","x axis")
             .attr("transform","translate(0,"+height+")")
             .call(xAxis);
 
     lineSvg.append("g")
+            .attr("class","y axis")
             .call(yAxis);
 
     lineSvg.append("path")
