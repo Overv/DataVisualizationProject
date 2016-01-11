@@ -13,6 +13,7 @@ var COL_DIRECTION = 5;
 var COL_ENERGY = 6;
 var COL_SPEED = 7;
 var COL_TOTALDISTANCE = 8;
+var COL_T = 9;
 
 var UPDATE_INTERVAL_MS = 33;
 var DATA_URL = 'https://raw.githubusercontent.com/Overv/DataVisualizationProject/master/html/data.csv';
@@ -104,12 +105,12 @@ function playPositions() {
         if (!data[off]) return;
 
         // Load next second
-        var sec = data[off][COL_TIMESTAMP];
+        var sec = data[off][COL_T];
 
         var currentData = [];
 
         for (var i = off; i < data.length; i++) {
-            if (data[i][COL_TIMESTAMP] == sec) {
+            if (data[i][COL_T] == sec) {
                 currentData.push(data[i]);
             } else {
                 // Set offset for next second
