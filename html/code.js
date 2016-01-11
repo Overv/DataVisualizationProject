@@ -32,7 +32,7 @@ function updatePositions(data) {
         .attr('class', 'player')
         .attr('transform', function(d) { return 'translate(' + xScale(d[0]) + ', ' + yScale(d[1]) + ')'; })
         .on('click', function(d) {
-            $('#stats-name').text('Player ' + d[2]);
+            showPlayerStats(d[2]);
         });
 
     newPlayerGroups.append('circle')
@@ -54,6 +54,10 @@ function updatePositions(data) {
     playerGroups
         .exit()
         .remove();
+}
+
+function showPlayerStats(tagid) {
+    // TODO
 }
 
 function clamp(val, min, max) {
