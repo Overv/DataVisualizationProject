@@ -13,6 +13,7 @@ var COL_DIRECTION = 5;
 var COL_ENERGY = 6;
 var COL_SPEED = 7;
 var COL_TOTALDISTANCE = 8;
+var COL_T = 9;
 
 var UPDATE_INTERVAL_MS = 33;
 var DATA_URL = 'https://raw.githubusercontent.com/Overv/DataVisualizationProject/master/html/data.csv';
@@ -45,8 +46,8 @@ function updatePositions(data) {
         .append('g')
         .attr('class', 'player')
         .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; })
-        .on('click', function(d) {
-            showPlayerStats(d[COL_ID]);
+        .on('click', function(d, i) {
+            showPlayerStats(i);
         });
 
     newPlayerGroups.append('circle')
@@ -62,7 +63,7 @@ function updatePositions(data) {
         .style('font-family', 'sans-serif')
         .style('font-size', '12px')
         .style('fill', 'white')
-        .text(function(d) { return d[COL_ID]; });
+        .text(function(d, i) { return i; });
 
     // Remove old data
     playerGroups
@@ -165,15 +166,24 @@ $.get(DATA_URL, function(csv) {
 function playPositions() {
     var off = 0;
 
-    setTimeout(function() {
-        // Load next second
-        var sec = data[off][COL_TIMESTAMP];
 
-        var currentData = [];
+    var emptyData = data[0].map(function() { return 0; });
+    emptyData[COL_XPOS] = -1000;
+    emptyData[COL_YPOS] = -1000;
+
+    var currentData = [];
+
+    setTimeout(function() {
+        if (!data[off]) return;
+
+
+        // Load next second
+        var sec = data[off][COL_T];
 
         for (var i = off; i < data.length; i++) {
-            if (data[i][COL_TIMESTAMP] == sec) {
-                currentData.push(data[i]);
+            if (data[i][COL_T] == sec) {
+                // Ensure that players are always in the same order
+                currentData[data[i][COL_ID]] = data[i];
             } else {
                 // Set offset for next second
                 off = i + 1;
@@ -181,8 +191,11 @@ function playPositions() {
             }
         }
 
-        // Ensure that players are always in the same order
-        currentData.sort(function(a, b) { return a[COL_ID] - b[COL_ID]; });
+        for (var i = 0; i < currentData.length; i++) {
+            if (!currentData[i]) {
+                currentData[i] = emptyData;
+            }
+        }
 
         updatePositions(currentData);
     }, UPDATE_INTERVAL_MS);
