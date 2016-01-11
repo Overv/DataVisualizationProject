@@ -46,8 +46,8 @@ function updatePositions(data) {
         .append('g')
         .attr('class', 'player')
         .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; })
-        .on('click', function(d) {
-            showPlayerStats(d[COL_ID]);
+        .on('click', function(d, i) {
+            showPlayerStats(i);
         });
 
     newPlayerGroups.append('circle')
@@ -63,7 +63,7 @@ function updatePositions(data) {
         .style('font-family', 'sans-serif')
         .style('font-size', '12px')
         .style('fill', 'white')
-        .text(function(d) { return d[COL_ID]; });
+        .text(function(d, i) { return i; });
 
     // Remove old data
     playerGroups
@@ -101,17 +101,22 @@ $.get(DATA_URL, function(csv) {
 function playPositions() {
     var off = 0;
 
+    var emptyData = data[0].map(function() { return 0; });
+    emptyData[COL_XPOS] = -1000;
+    emptyData[COL_YPOS] = -1000;
+
+    var currentData = [];
+
     setInterval(function() {
         if (!data[off]) return;
 
         // Load next second
         var sec = data[off][COL_T];
 
-        var currentData = [];
-
         for (var i = off; i < data.length; i++) {
             if (data[i][COL_T] == sec) {
-                currentData.push(data[i]);
+                // Ensure that players are always in the same order
+                currentData[data[i][COL_ID]] = data[i];
             } else {
                 // Set offset for next second
                 off = i + 1;
@@ -119,8 +124,11 @@ function playPositions() {
             }
         }
 
-        // Ensure that players are always in the same order
-        currentData.sort(function(a, b) { return a[COL_ID] - b[COL_ID]; });
+        for (var i = 0; i < currentData.length; i++) {
+            if (!currentData[i]) {
+                currentData[i] = emptyData;
+            }
+        }
 
         updatePositions(currentData);
     }, UPDATE_INTERVAL_MS);
