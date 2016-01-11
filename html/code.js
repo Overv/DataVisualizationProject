@@ -15,6 +15,7 @@ var COL_SPEED = 7;
 var COL_TOTALDISTANCE = 8;
 
 var UPDATE_INTERVAL_MS = 33;
+var DATA_URL = 'https://raw.githubusercontent.com/Overv/DataVisualizationProject/master/html/data.csv';
 
 var vis = d3.select('#field');
 
@@ -77,7 +78,7 @@ function clamp(val, min, max) {
     return Math.min(max, Math.max(min, val));
 }
 
-$.get('data.csv', function(csv) {
+$.get(DATA_URL, function(csv) {
     var lines = csv.split('\n');
     lines = lines.map(function(l) {
         return l.split(',').map(function(v) {
