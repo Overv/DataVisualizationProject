@@ -4,6 +4,17 @@ var FIELD_WIDTH = 105;
 var FIELD_HEIGHT = 68;
 
 var data;
+var COL_TIMESTAMP = 0;
+var COL_ID = 1;
+var COL_XPOS = 2;
+var COL_YPOS = 3;
+var COL_HEADING = 4;
+var COL_DIRECTION = 5;
+var COL_ENERGY = 6;
+var COL_SPEED = 7;
+var COL_TOTALDISTANCE = 8;
+
+var UPDATE_INTERVAL_MS = 33;
 
 var vis = d3.select('#field');
 
@@ -24,17 +35,17 @@ function updatePositions(data) {
     // Update existing players
     playerGroups
         .transition()
-        .duration(1000)
-        .attr('transform', function(d) { return 'translate(' + xScale(d[0]) + ', ' + yScale(d[1]) + ')'; });
+        .duration(UPDATE_INTERVAL_MS)
+        .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; });
 
     // Add new players
     var newPlayerGroups = playerGroups
         .enter()
         .append('g')
         .attr('class', 'player')
-        .attr('transform', function(d) { return 'translate(' + xScale(d[0]) + ', ' + yScale(d[1]) + ')'; })
+        .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; })
         .on('click', function(d) {
-            showPlayerStats(d[2]);
+            showPlayerStats(d[COL_ID]);
         });
 
     newPlayerGroups.append('circle')
@@ -50,7 +61,7 @@ function updatePositions(data) {
         .style('font-family', 'sans-serif')
         .style('font-size', '12px')
         .style('fill', 'white')
-        .text(function(d) { return d[2]; });
+        .text(function(d) { return d[COL_ID]; });
 
     // Remove old data
     playerGroups
@@ -81,28 +92,32 @@ $.get('data.csv', function(csv) {
     lines.shift();
 
     data = lines;
+
+    playPositions();
 });
 
-/*var data = [];
+function playPositions() {
+    var off = 0;
 
-setInterval(function() {
-    for (var i = 0; i < 11; i++) {
-        if (!data[i]) {
-            data[i] = [
-                Math.random() * FIELD_WIDTH / 2,
-                Math.random() * FIELD_HEIGHT,
-                i + 1
-            ];
-        } else {
-            data[i][0] += Math.random() * 10 - 5;
-            data[i][1] += Math.random() * 10 - 5;
+    setInterval(function() {
+        // Load next second
+        var sec = data[off][COL_TIMESTAMP];
 
-            if (data[i][0] < 0) data[i][0] = -data[i][0];
-            if (data[i][1] < 0) data[i][1] = -data[i][1];
-            if (data[i][0] > FIELD_WIDTH) data[i][0] = 2*FIELD_WIDTH - data[i][0];
-            if (data[i][1] > FIELD_HEIGHT) data[i][1] = 2*FIELD_HEIGHT - data[i][1];
+        var currentData = [];
+
+        for (var i = off; i < data.length; i++) {
+            if (data[i][COL_TIMESTAMP] == sec) {
+                currentData.push(data[i]);
+            } else {
+                // Set offset for next second
+                off = i + 1;
+                break;
+            }
         }
-    }
 
-    updatePositions(data);
-}, 1000);*/
+        // Ensure that players are always in the same order
+        currentData.sort(function(a, b) { return a[COL_ID] - b[COL_ID]; });
+
+        updatePositions(currentData);
+    }, UPDATE_INTERVAL_MS);
+}
