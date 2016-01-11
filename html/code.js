@@ -101,6 +101,8 @@ function playPositions() {
     var off = 0;
 
     setInterval(function() {
+        if (!data[off]) return;
+
         // Load next second
         var sec = data[off][COL_TIMESTAMP];
 
