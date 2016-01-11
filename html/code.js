@@ -3,6 +3,8 @@
 var FIELD_WIDTH = 105;
 var FIELD_HEIGHT = 68;
 
+var data;
+
 var vis = d3.select('#field');
 
 var xScale = d3.scale.linear()
@@ -77,6 +79,8 @@ $.get('data.csv', function(csv) {
         });
     });
     lines.shift();
+
+    data = lines;
 });
 
 /*var data = [];
