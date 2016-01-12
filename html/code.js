@@ -170,8 +170,9 @@ function changeGraph(tagid){
     
     var playerIdData = data.filter(function (row) {return row[COL_ID]==tagid});
     
+    var playerData=[];
     if (option =="Total_Distance"){
-        var playerData=[];
+        
         var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
         //console.log(previousMin)
         playerData.push([previousMin,playerIdData[0][COL_TOTALDISTANCE]]);
@@ -186,7 +187,7 @@ function changeGraph(tagid){
         }
     }
     else if (option=="Speed"){
-        var playerData=[];
+        
         var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
         //console.log(previousMin)
         playerData.push([previousMin,playerIdData[0][COL_SPEED]]);
@@ -228,9 +229,10 @@ function changeGraph(tagid){
     xStatScale.domain(d3.extent(playerData,function(d) {return d[0]}));
     yStatScale.domain(d3.extent(playerData,function(d) {return d[1]}));
 
-    //var focus = lineSvg.append("g")
-    //                  .style("display","none");
-    
+    var focus = lineSvg.append("g")
+                      .style("display","none");
+
+    var bisectMinute = d3.bisector(function(d) { return d[0];}).left
 
     lineSvg.append("g")
             .attr("class","x axis")
@@ -256,7 +258,126 @@ function changeGraph(tagid){
            .datum(playerData)
            .attr("class","line")
            .attr("d",line);
-        
+
+    focus.append("circle")
+         .attr("class","y")
+         .style("fill","none")
+         .style("stroke","blue")
+         .attr("r",4);
+
+    lineSvg.append("rect")
+           .attr("width",width)
+           .attr("height", height)
+           .style("fill", "none")
+           .style("pointer-events", "all") 
+           .on("mouseover", function() { focus.style("display", null); })
+           .on("mouseout", function() { focus.style("display", "none"); })
+           .on("mousemove", mousemove);
+
+
+     function mousemove() {                     
+        var x0 = xStatScale.invert(d3.mouse(this)[0]),
+            i = bisectMinute(playerData, x0, 1),
+            d0 = playerData[i - 1],
+            d1 = playerData[i],
+            d = x0 - d0[0] > d1[0] - x0 ? d1 : d0;
+        //console.log("Position of x is"+x0);
+        focus.select("circle.y")
+            .attr("transform",
+                  "translate(" + xStatScale(d[0]) + "," + 
+                                 yStatScale(d[1]) + ")");
+         // Focus dashed lines added
+    //append the x dashed line
+    focus.append("line")
+        .attr("class", "xdashed")
+        .style("stroke", "blue")
+        .style("stroke-dasharray", "3,3")
+        .style("opacity", 0.5)
+        .attr("y1", 0)
+        .attr("y2", height);
+
+    // append the y dashed line
+    focus.append("line")
+        .attr("class", "ydashed")
+        .style("stroke", "blue")
+        .style("stroke-dasharray", "3,3")
+        .style("opacity", 0.5)
+        .attr("x1", width)
+        .attr("x2", width);
+
+    // place the x value at the intersection
+    focus.append("text")
+        .attr("class", "y1")
+        .style("stroke", "white")
+        .style("stroke-width", "3.5px")
+        .style("opacity", 0.8)
+        .attr("dx", 8)
+        .attr("dy", "-.3em");
+    
+    focus.append("text")
+        .attr("class", "y2")
+        .attr("dx", 8)
+        .attr("dy", "-.3em");
+
+    // place the y value at the intersection
+    focus.append("text")
+        .attr("class", "y3")
+        .style("stroke", "white")
+        .style("stroke-width", "3.5px")
+        .style("opacity", 0.8)
+        .attr("dx", 8)
+        .attr("dy", "1em");
+
+    focus.append("text")
+        .attr("class", "y4")
+        .attr("dx", 8)
+        .attr("dy", "1em");
+
+    
+    //place the text for the y values
+    focus.select("text.y1")
+         .attr("transform",
+            "translate(" + xStatScale(d[0]) + "," +
+                           yStatScale(d[1]) + ")")
+          .text(d[0]);
+
+    focus.select("text.y2")
+         .attr("transform",
+            "translate(" + xStatScale(d[0]) + "," +
+                           yStatScale(d[1]) + ")")
+         .text(d[0]);
+
+    //place the text for the x values
+    focus.select("text.y3")
+         .attr("transform",
+          "translate(" + xStatScale(d[0]) + "," +
+                           yStatScale(d[1]) + ")")
+         .text(d[1]);
+
+    focus.select("text.y4")
+         .attr("transform",
+            "translate(" + xStatScale(d[0]) + "," +
+                           yStatScale(d[1]) + ")")
+         .text(d[1]);
+
+    //place the dashed lines at the intersection of the mouse
+    focus.select(".xdashed")
+         .attr("transform",
+            "translate(" + xStatScale(d[0]) + "," +
+                           yStatScale(d[1]) + ")")
+         .attr("y2", height - yStatScale(d[1]));
+
+    focus.select(".ydashed")
+         .attr("transform",
+            "translate(" + width * -1 + "," +
+                           yStatScale(d[1]) + ")")
+         .attr("x2", width + width);
+
+
+        }//end of function mousemove
+
+   
+
     }
 
 function clamp(val, min, max) {
@@ -293,7 +414,7 @@ function playPositions() {
     var currentData = [];
     //setTimeout
     //setInterval
-    setInterval(function() {
+    setTimeout(function() {
         if (!data[off]) return;
 
 
