@@ -15,7 +15,7 @@ var COL_SPEED = 7;
 var COL_TOTALDISTANCE = 8;
 var COL_T = 9;
 
-var UPDATE_INTERVAL_MS = 33;
+var UPDATE_INTERVAL_MS = 16;
 var DATA_URL = 'https://raw.githubusercontent.com/Overv/DataVisualizationProject/master/html/data.csv';
 
 var vis = d3.select('#field');
