@@ -53,7 +53,8 @@ function updatePositions(data) {
     newPlayerGroups.append('circle')
         .attr('cx', 0)
         .attr('cy', 0)
-        .attr('r', 10);
+        .attr('r', 10)
+        .style("fill",function(d,i){return playerPosColor(i);});
 
     newPlayerGroups.append('text')
         .attr('x', 0)
@@ -62,13 +63,58 @@ function updatePositions(data) {
         .attr('alignment-baseline', 'central')
         .style('font-family', 'sans-serif')
         .style('font-size', '12px')
-        .style('fill', 'white')
-        .text(function(d, i) { return i; });
-
+        .style('fill', "black")
+        .text(function(d, i) { return playerPosText(i); });
     // Remove old data
     playerGroups
         .exit()
         .remove();
+}
+
+function playerPosText(noPlayer){
+        switch(noPlayer){
+            case 12:
+            case 5:
+                return "FW";
+            case 11:
+                return "MF";
+
+            case 6:
+            case 8:
+                return "WG";
+            case 2:
+                return "RB";
+            case 1:
+                return "LB";
+            case 14:
+            case 4:
+                return "CB";
+            default:
+                return noPlayer;
+        }
+}
+
+function playerPosColor(noPlayer){
+        switch(noPlayer){
+            case 12:
+            case 5:
+                return "#FE2E2E";
+            case 11:
+                return "#2E64FE";
+
+            case 6:
+            case 8:
+                return "red";
+            case 2:
+                return "#D7DF01";
+            case 1:
+                return "#D7DF01";
+            case 14:
+            case 4:
+                return "#D7DF01";
+            default:
+                return "black";
+        }
 }
 
 function showPlayerStats(tagid) {
@@ -79,30 +125,81 @@ function showPlayerStats(tagid) {
        .append("div")
        .attr("id","stats");
 
+    //Append a selection box to change between total distance 
+    // and speed of the player per minute
+    //d3.select("#selList").node().value == "Total_Distance"
+    var stats = d3.select("#stats")
+    stats.append("select")
+         .attr("id","selList")
+         .on("click",function(){changeGraph(tagid)});
+    
+    var list = d3.select("#selList");
+
+    list.append("option")
+        .attr("value","Total_Distance")
+        .text("Total_Distance");
+
+    list.append("option")
+        .attr("value","Speed")
+        .text("Speed");
+
+
+    
+    //console.log(playerIdData.length);
+
+    //console.log(playerIdData);
+    //the option of the user in the selection box
+    changeGraph(tagid);
+
+    //console.log(playerData.length);
+    //console.log(playerData);
+
+    // the player's timestamp is in seconds from the start of the game
+}
+
+
+function changeGraph(tagid){
+
+    d3.select("#statsGraph").remove();
+    
 
     var margin = {top:20, right:20, bottom:30, left:50},
         width=600 - margin.left-margin.right,
         height=300 - margin.top - margin.bottom;
-
+    var option = d3.select("#selList").node().value;
+    
     var playerIdData = data.filter(function (row) {return row[COL_ID]==tagid});
-    //console.log(playerIdData.length);
+    
+    if (option =="Total_Distance"){
+        var playerData=[];
+        var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
+        //console.log(previousMin)
+        playerData.push([previousMin,playerIdData[0][COL_TOTALDISTANCE]]);
+        //console.log("This is the previousMin" + previousMin);
 
-    console.log(playerIdData);
-    var playerData=[];
-    var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
-    //console.log(previousMin)
-    playerData.push([playerIdData[0][COL_TIMESTAMP],playerIdData[0][COL_TOTALDISTANCE]]);
-    //console.log("This is the previousMin" + previousMin);
-
-    for (var i=0 ; i<playerIdData.length; i++){
-        var curMin = Math.floor(playerIdData[i][COL_TIMESTAMP] / 60);
-        if(!(curMin==previousMin)){
-            playerData.push([curMin,playerIdData[i][COL_TOTALDISTANCE]]);
-            previousMin=curMin;
+        for (var i=0 ; i<playerIdData.length; i++){
+            var curMin = Math.floor(playerIdData[i][COL_TIMESTAMP] / 60);
+            if(!(curMin==previousMin)){
+                playerData.push([curMin,playerIdData[i][COL_TOTALDISTANCE]]);
+                previousMin=curMin;
+            }
         }
     }
-    //console.log(playerData.length);
-    //console.log(playerData);
+    else if (option=="Speed"){
+        var playerData=[];
+        var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
+        //console.log(previousMin)
+        playerData.push([previousMin,playerIdData[0][COL_SPEED]]);
+        //console.log("This is the previousMin" + previousMin);
+
+        for (var i=0 ; i<playerIdData.length; i++){
+            var curMin = Math.floor(playerIdData[i][COL_TIMESTAMP] / 60);
+            if(!(curMin==previousMin)){
+                playerData.push([curMin,playerIdData[i][COL_SPEED]]);
+                previousMin=curMin;
+            }
+        }
+    }
 
     var xStatScale = d3.scale.linear()
                         .range([0,width]);
@@ -131,6 +228,10 @@ function showPlayerStats(tagid) {
     xStatScale.domain(d3.extent(playerData,function(d) {return d[0]}));
     yStatScale.domain(d3.extent(playerData,function(d) {return d[1]}));
 
+    //var focus = lineSvg.append("g")
+    //                  .style("display","none");
+    
+
     lineSvg.append("g")
             .attr("class","x axis")
             .attr("transform","translate(0,"+height+")")
@@ -155,9 +256,8 @@ function showPlayerStats(tagid) {
            .datum(playerData)
            .attr("class","line")
            .attr("d",line);
-
-    // the player's timestamp is in seconds from the start of the game
-}
+        
+    }
 
 function clamp(val, min, max) {
     return Math.min(max, Math.max(min, val));
@@ -191,8 +291,9 @@ function playPositions() {
     emptyData[COL_YPOS] = -1000;
 
     var currentData = [];
-
-    setTimeout(function() {
+    //setTimeout
+    //setInterval
+    setInterval(function() {
         if (!data[off]) return;
 
 
