@@ -43,7 +43,7 @@ function updatePositions(data, instanttransition) {
     playerGroups
         .transition()
         .ease('linear')
-        .duration(instanttransition ? 0 : (2000 / $('#playback-speed').val()))
+        .duration(instanttransition ? 33 : (2000 / $('#playback-speed').val()))
         .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; });
 
     // Add new players
