@@ -9,12 +9,48 @@
 
     <body>
         <svg id="field"></svg>
-        <div id="stats"></div>
 
         <div id="playback-bar">
             <input id="playback-button" type="button" value="Pause" />
             <input id="playback-slider" type="range" min="0" max="100" value="0" />
             <span id="playback-time">00:00</span>
+        </div>
+
+        <div id="stats"></div>
+        <div id="details">
+            <table id="playerTable" cellspacing="0" cellpadding="3">
+                <tbody>
+                    <tr>
+                        <td id="playerName">The name</td>
+                        <td class="playerValue"></td>
+                    </tr>
+                    <tr>
+                        <td id="playerBirth">Date of Birth:</td>
+                        <td class="playerValue"> 12/12/12</td>
+                    </tr>
+                    <tr>
+                        <td id="playerName">Nationality:</td>
+                        <td class="playerValue">Greek</td>
+                    </tr>
+                    <tr>
+                        <td id="playerName">Height:</td>
+                        <td class="playerValue">1.93</td>
+                    </tr>
+                    <tr>
+                        <td id="playerName">Weight:</td>
+                        <td class="playerValue">82Kg</td>
+                    </tr>
+                    <tr>
+                        <td id="playerName">Position:</td>
+                        <td class="playerValue">Forward</td>
+                    </tr>
+                    <tr>
+                        <td id="playerName">Squad Number:</td>
+                        <td class="playerValue">9</td>
+                    </tr>
+
+                </tbody>
+            </table>
         </div>
 
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
