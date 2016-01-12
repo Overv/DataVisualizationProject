@@ -504,3 +504,73 @@ function playPositions() {
         }
     }, UPDATE_INTERVAL_MS);
 }
+
+function init3DField() {
+    var renderer = new THREE.WebGLRenderer({canvas: $('#field3d')[0]});
+    renderer.setSize(575, 360);
+    //renderer.shadowMap.enabled = true;
+
+    var scene = new THREE.Scene();
+
+    var loader = new THREE.JSONLoader();
+    loader.load('models/pitch.json', function(pitchGeometry) {
+        loader.load('models/goal_posts.json', function(postsGeometry) {
+            loader.load('models/goal_net.json', function(netGeometry) {
+                var loader = new THREE.TextureLoader();
+                loader.load('textures/pitch_texture.jpg', function(pitchTexture) {
+                    pitchTexture.wrapS = THREE.RepeatWrapping;
+                    pitchTexture.wrapT = THREE.RepeatWrapping;
+                    pitchTexture.repeat.set(1, 1);
+
+                    loader.load('textures/net_texture.png', function(netTexture) {
+                        netTexture.wrapS = THREE.RepeatWrapping;
+                        netTexture.wrapT = THREE.RepeatWrapping;
+                        netTexture.repeat.set(15, 15);
+
+                        var pitchMaterial = new THREE.MeshBasicMaterial({
+                            color: 0xffffff,
+                            map: pitchTexture
+                        });
+                        var pitchMesh = new THREE.Mesh(pitchGeometry, pitchMaterial);
+                        scene.add(pitchMesh);
+
+                        var postsMaterial = new THREE.MeshBasicMaterial({
+                            color: 0xffffff
+                        });
+                        var postsMesh = new THREE.Mesh(postsGeometry, postsMaterial);
+                        scene.add(postsMesh);
+                        var postsMesh2 = new THREE.Mesh(postsGeometry, postsMaterial);
+                        postsMesh2.rotation.y = Math.PI;
+                        scene.add(postsMesh2);
+
+                        var netMaterial = new THREE.MeshBasicMaterial({
+                            color: 0xffffff,
+                            map: netTexture,
+                            side: THREE.DoubleSide,
+                            transparent: true
+                        });
+                        var netMesh = new THREE.Mesh(netGeometry, netMaterial);
+                        scene.add(netMesh);
+                        var netMesh2 = new THREE.Mesh(netGeometry, netMaterial);
+                        netMesh2.rotation.y = Math.PI;
+                        scene.add(netMesh2);
+
+                        var camera = new THREE.PerspectiveCamera(75, 575/360, 0.1, 1000);
+                        camera.position.set(0, 10.5, 10.5);
+                        camera.lookAt(new THREE.Vector3(0, -4, 0));
+
+                        var render = function() {
+                            requestAnimationFrame(render);
+
+                            renderer.render(scene, camera);
+                        };
+
+                        render();
+                    });
+                });
+            });
+        });
+    });
+}
+
+init3DField();

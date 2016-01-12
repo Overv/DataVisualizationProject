@@ -1,7 +1,9 @@
-#field {
+#field-container {
     display: block;
     float: left;
+}
 
+#field {
     width: 575px;
     height: 360px;
 
@@ -124,4 +126,15 @@
     border: 1px solid white;
     background: #222;
     color: white;
+}
+
+#field3d {
+    width: 575px;
+    height: 360px;
+
+    display: block;
+    float: left;
+    margin-left: 10px;
+
+    border: 1px solid black;
 }
