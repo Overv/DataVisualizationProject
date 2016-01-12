@@ -15,7 +15,7 @@ var COL_SPEED = 7;
 var COL_TOTALDISTANCE = 8;
 var COL_T = 9;
 
-var UPDATE_INTERVAL_MS = 33;
+var UPDATE_INTERVAL_MS = 16;
 var DATA_URL = 'https://raw.githubusercontent.com/Overv/DataVisualizationProject/master/html/data.csv';
 
 var vis = d3.select('#field');
@@ -33,7 +33,7 @@ var firstFrame, lastFrame;
 var draggingSlider = false;
 var paused = false;
 
-function updatePositions(data) {
+function updatePositions(data, instanttransition) {
     // Update data
     var playerGroups = vis
         .selectAll('.player')
@@ -42,7 +42,8 @@ function updatePositions(data) {
     // Update existing players
     playerGroups
         .transition()
-        .duration(UPDATE_INTERVAL_MS)
+        .ease('linear')
+        .duration(instanttransition ? 33 : (2000 / $('#playback-speed').val()))
         .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; });
 
     // Add new players
@@ -470,29 +471,36 @@ function playPositions() {
     emptyData[COL_YPOS] = -1000;
 
     var currentData = [];
+    var lastSec = -1;
     currentFrame = firstFrame;
     
     setInterval(function() {
-
         // Load next second
-        for (var i = 0; i < data.length; i++) {
-            if (data[i][COL_T] == currentFrame) {
-                // Ensure that players are always in the same order
-                currentData[data[i][COL_ID]] = data[i];
+        var currentSec = Math.floor(currentFrame);
+        if (currentSec != lastSec) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i][COL_T] == currentSec) {
+                    // Ensure that players are always in the same order
+                    currentData[data[i][COL_ID]] = data[i];
+                }
             }
-        }
 
-        for (var i = 0; i < currentData.length; i++) {
-            if (!currentData[i]) {
-                currentData[i] = emptyData;
+            for (var i = 0; i < currentData.length; i++) {
+                if (!currentData[i]) {
+                    currentData[i] = emptyData;
+                }
             }
-        }
 
-        updatePositions(currentData);
-        updatePlaybackSlider();
+            updatePositions(currentData, draggingSlider);
+            updatePlaybackSlider();
+        }
 
         if (!draggingSlider && !paused) {
-            currentFrame += 1;
+            lastSec = currentSec;
+            currentFrame += $('#playback-speed').val() / 60;
+            currentFrame = Math.min(currentFrame, lastFrame);
+        } else if (paused) {
+            updatePositions(currentData, true);
         }
     }, UPDATE_INTERVAL_MS);
 }
