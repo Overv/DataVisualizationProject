@@ -42,7 +42,8 @@ function updatePositions(data) {
     // Update existing players
     playerGroups
         .transition()
-        .duration(UPDATE_INTERVAL_MS)
+        .ease('linear')
+        .duration(2000 / $('#playback-speed').val())
         .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; });
 
     // Add new players
@@ -349,28 +350,33 @@ function playPositions() {
     emptyData[COL_YPOS] = -1000;
 
     var currentData = [];
+    var lastSec = -1;
     currentFrame = firstFrame;
     
     setInterval(function() {
         // Load next second
-        for (var i = 0; i < data.length; i++) {
-            if (data[i][COL_T] == currentFrame) {
-                // Ensure that players are always in the same order
-                currentData[data[i][COL_ID]] = data[i];
+        var currentSec = Math.floor(currentFrame);
+        if (currentSec != lastSec) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i][COL_T] == currentSec) {
+                    // Ensure that players are always in the same order
+                    currentData[data[i][COL_ID]] = data[i];
+                }
             }
-        }
 
-        for (var i = 0; i < currentData.length; i++) {
-            if (!currentData[i]) {
-                currentData[i] = emptyData;
+            for (var i = 0; i < currentData.length; i++) {
+                if (!currentData[i]) {
+                    currentData[i] = emptyData;
+                }
             }
-        }
 
-        updatePositions(currentData);
-        updatePlaybackSlider();
+            updatePositions(currentData);
+            updatePlaybackSlider();
+        }
 
         if (!draggingSlider && !paused) {
-            currentFrame += 1;
+            lastSec = currentSec;
+            currentFrame += $('#playback-speed').val() / 60;
         }
     }, UPDATE_INTERVAL_MS);
 }
