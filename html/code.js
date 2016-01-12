@@ -33,7 +33,7 @@ var firstFrame, lastFrame;
 var draggingSlider = false;
 var paused = false;
 
-function updatePositions(data) {
+function updatePositions(data, instanttransition) {
     // Update data
     var playerGroups = vis
         .selectAll('.player')
@@ -43,7 +43,7 @@ function updatePositions(data) {
     playerGroups
         .transition()
         .ease('linear')
-        .duration(2000 / $('#playback-speed').val())
+        .duration(instanttransition ? 0 : (2000 / $('#playback-speed').val()))
         .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; });
 
     // Add new players
@@ -475,7 +475,6 @@ function playPositions() {
     currentFrame = firstFrame;
     
     setInterval(function() {
-
         // Load next second
         var currentSec = Math.floor(currentFrame);
         if (currentSec != lastSec) {
@@ -492,7 +491,7 @@ function playPositions() {
                 }
             }
 
-            updatePositions(currentData);
+            updatePositions(currentData, draggingSlider);
             updatePlaybackSlider();
         }
 
@@ -500,6 +499,8 @@ function playPositions() {
             lastSec = currentSec;
             currentFrame += $('#playback-speed').val() / 60;
             currentFrame = Math.min(currentFrame, lastFrame);
+        } else if (paused) {
+            updatePositions(currentData, true);
         }
     }, UPDATE_INTERVAL_MS);
 }
