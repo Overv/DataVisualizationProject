@@ -78,17 +78,19 @@ function showPlayerStats(tagid) {
     d3.select("body")
        .append("div")
        .attr("id","stats");
+
+
     var margin = {top:20, right:20, bottom:30, left:50},
         width=600 - margin.left-margin.right,
         height=300 - margin.top - margin.bottom;
 
     var playerIdData = data.filter(function (row) {return row[COL_ID]==tagid});
-    console.log(playerIdData.length);
+    //console.log(playerIdData.length);
 
     console.log(playerIdData);
     var playerData=[];
     var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
-    console.log(previousMin)
+    //console.log(previousMin)
     playerData.push([playerIdData[0][COL_TIMESTAMP],playerIdData[0][COL_TOTALDISTANCE]]);
     //console.log("This is the previousMin" + previousMin);
 
@@ -99,8 +101,8 @@ function showPlayerStats(tagid) {
             previousMin=curMin;
         }
     }
-    console.log(playerData.length);
-    console.log(playerData);
+    //console.log(playerData.length);
+    //console.log(playerData);
 
     var xStatScale = d3.scale.linear()
                         .range([0,width]);
@@ -109,7 +111,7 @@ function showPlayerStats(tagid) {
 
     var xAxis = d3.svg.axis()
                    .scale(xStatScale)
-                   .orient("bottom");
+                   .orient("bottom").ticks(20);
     var yAxis = d3.svg.axis()
                   .scale(yStatScale)
                   .orient("left");
@@ -132,11 +134,22 @@ function showPlayerStats(tagid) {
     lineSvg.append("g")
             .attr("class","x axis")
             .attr("transform","translate(0,"+height+")")
-            .call(xAxis);
+            .call(xAxis)
+            .append("text")
+            .attr("x",510)
+            .attr("dy","-8px")
+            .style("text-anchor","end")
+            .text("Minute");
 
     lineSvg.append("g")
             .attr("class","y axis")
-            .call(yAxis);
+            .call(yAxis)
+            .append("text")
+            .attr("transform","rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor","end")
+            .text("Total_Distance");
 
     lineSvg.append("path")
            .datum(playerData)
