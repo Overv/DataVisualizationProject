@@ -73,3 +73,13 @@
 #stats li:nth-child(2) {
     background: #444;
 }
+
+#playback-bar {
+    clear: both;
+
+    width: 575px;
+}
+
+#playback-bar input[type=range] {
+    width: 100%;
+}

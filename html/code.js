@@ -28,6 +28,10 @@ var yScale = d3.scale.linear()
     .domain([0, FIELD_HEIGHT])
     .range([350, 9]);
 
+var currentFrame = 0;
+var firstFrame, lastFrame;
+var playing = true;
+
 function updatePositions(data) {
     // Update data
     var playerGroups = vis
@@ -275,39 +279,59 @@ $.get(DATA_URL, function(csv) {
             }
         });
     });
+    
+    // First row is header, last row is empty
     lines.shift();
+    lines.pop();
 
     data = lines;
 
+    updatePlaybackSlider();
     playPositions();
 });
 
+function updatePlaybackSlider() {
+    var sliderEl = $('#playback-slider');
+
+    if (lastFrame === undefined) {
+        firstFrame = data[0][COL_T];
+        lastFrame = data[data.length - 1][COL_T];
+
+        sliderEl.attr('min', firstFrame);
+        sliderEl.attr('max', lastFrame);
+
+        sliderEl.mousedown(function() {
+            playing = false;
+        });
+
+        sliderEl.mouseup(function() {
+            playing = true;
+        });
+
+        sliderEl.on('input change', function() {
+            currentFrame = +$(this).val();
+        });
+    }
+
+    if (playing) {
+        sliderEl.val(currentFrame);
+    }
+}
+
 function playPositions() {
-    var off = 0;
-
-
     var emptyData = data[0].map(function() { return 0; });
     emptyData[COL_XPOS] = -1000;
     emptyData[COL_YPOS] = -1000;
 
     var currentData = [];
-    //setTimeout
-    //setInterval
+    currentFrame = firstFrame;
+    
     setInterval(function() {
-        if (!data[off]) return;
-
-
         // Load next second
-        var sec = data[off][COL_T];
-
-        for (var i = off; i < data.length; i++) {
-            if (data[i][COL_T] == sec) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i][COL_T] == currentFrame) {
                 // Ensure that players are always in the same order
                 currentData[data[i][COL_ID]] = data[i];
-            } else {
-                // Set offset for next second
-                off = i + 1;
-                break;
             }
         }
 
@@ -318,5 +342,10 @@ function playPositions() {
         }
 
         updatePositions(currentData);
+        updatePlaybackSlider();
+
+        if (playing) {
+            currentFrame += 1;
+        }
     }, UPDATE_INTERVAL_MS);
 }
