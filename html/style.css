@@ -73,3 +73,46 @@
 #stats li:nth-child(2) {
     background: #444;
 }
+
+#playback-bar {
+    clear: both;
+
+    width: 575px;
+
+    border: 1px solid black;
+    background: #222;
+}
+
+#playback-slider {
+    width: 440px;
+
+    position: relative;
+    top: 3px;
+}
+
+#playback-button {
+    width: 60px;
+
+    position: relative;
+    top: -2px;
+
+    margin: 5px;
+
+    border: 1px solid white;
+    background: #222;
+    color: white;
+}
+
+#playback-time {
+    display: inline-block;
+
+    padding: 5px;
+
+    color: white;
+    font-family: Roboto;
+    font-weight: normal;
+    font-size: 16px;
+
+    position: relative;
+    top: -2px;
+}

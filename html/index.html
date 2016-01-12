@@ -9,11 +9,12 @@
 
     <body>
         <svg id="field"></svg>
+        <div id="stats"></div>
 
-        <div id="stats" >
-            
-
-            
+        <div id="playback-bar">
+            <input id="playback-button" type="button" value="Pause" />
+            <input id="playback-slider" type="range" min="0" max="100" value="0" />
+            <span id="playback-time">00:00</span>
         </div>
 
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>

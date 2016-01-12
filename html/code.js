@@ -28,6 +28,11 @@ var yScale = d3.scale.linear()
     .domain([0, FIELD_HEIGHT])
     .range([350, 9]);
 
+var currentFrame = 0;
+var firstFrame, lastFrame;
+var draggingSlider = false;
+var paused = false;
+
 function updatePositions(data) {
     // Update data
     var playerGroups = vis
@@ -396,39 +401,84 @@ $.get(DATA_URL, function(csv) {
             }
         });
     });
+    
+    // First row is header, last row is empty
     lines.shift();
+    lines.pop();
 
     data = lines;
 
+    updatePlaybackSlider();
     playPositions();
 });
 
+function updatePlaybackSlider() {
+    var sliderEl = $('#playback-slider');
+
+    if (lastFrame === undefined) {
+        firstFrame = data[0][COL_T];
+        lastFrame = data[data.length - 1][COL_T];
+
+        sliderEl.attr('min', firstFrame);
+        sliderEl.attr('max', lastFrame);
+
+        sliderEl.mousedown(function() {
+            draggingSlider = true;
+        });
+
+        sliderEl.mouseup(function() {
+            draggingSlider = false;
+        });
+
+        sliderEl.on('input change', function() {
+            currentFrame = +$(this).val();
+            updatePlaybackTime();
+        });
+
+        $('#playback-button').click(function() {
+            paused = !paused;
+
+            if (paused) {
+                $(this).val('Play');
+            } else {
+                $(this).val('Pause');
+            }
+        });
+    }
+
+    if (!draggingSlider && !paused) {
+        sliderEl.val(currentFrame);
+        updatePlaybackTime();
+    }
+}
+
+function updatePlaybackTime() {
+    var d = new Date(currentFrame * 1000);
+
+    var mins = '0' + d.getMinutes();
+    var secs = '0' + d.getSeconds();
+
+    var t = mins.substr(-2) + ':' + secs.substr(-2);
+
+    var el = $('#playback-time');
+    el.text(t);
+}
+
 function playPositions() {
-    var off = 0;
-
-
     var emptyData = data[0].map(function() { return 0; });
     emptyData[COL_XPOS] = -1000;
     emptyData[COL_YPOS] = -1000;
 
     var currentData = [];
-    //setTimeout
-    //setInterval
-    setTimeout(function() {
-        if (!data[off]) return;
-
+    currentFrame = firstFrame;
+    
+    setInterval(function() {
 
         // Load next second
-        var sec = data[off][COL_T];
-
-        for (var i = off; i < data.length; i++) {
-            if (data[i][COL_T] == sec) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i][COL_T] == currentFrame) {
                 // Ensure that players are always in the same order
                 currentData[data[i][COL_ID]] = data[i];
-            } else {
-                // Set offset for next second
-                off = i + 1;
-                break;
             }
         }
 
@@ -439,5 +489,10 @@ function playPositions() {
         }
 
         updatePositions(currentData);
+        updatePlaybackSlider();
+
+        if (!draggingSlider && !paused) {
+            currentFrame += 1;
+        }
     }, UPDATE_INTERVAL_MS);
 }
