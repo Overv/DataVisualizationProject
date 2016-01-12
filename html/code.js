@@ -30,7 +30,8 @@ var yScale = d3.scale.linear()
 
 var currentFrame = 0;
 var firstFrame, lastFrame;
-var playing = true;
+var draggingSlider = false;
+var paused = false;
 
 function updatePositions(data) {
     // Update data
@@ -301,21 +302,45 @@ function updatePlaybackSlider() {
         sliderEl.attr('max', lastFrame);
 
         sliderEl.mousedown(function() {
-            playing = false;
+            draggingSlider = true;
         });
 
         sliderEl.mouseup(function() {
-            playing = true;
+            draggingSlider = false;
         });
 
         sliderEl.on('input change', function() {
             currentFrame = +$(this).val();
+            updatePlaybackTime();
+        });
+
+        $('#playback-button').click(function() {
+            paused = !paused;
+
+            if (paused) {
+                $(this).val('Play');
+            } else {
+                $(this).val('Pause');
+            }
         });
     }
 
-    if (playing) {
+    if (!draggingSlider && !paused) {
         sliderEl.val(currentFrame);
+        updatePlaybackTime();
     }
+}
+
+function updatePlaybackTime() {
+    var d = new Date(currentFrame * 1000);
+
+    var mins = '0' + d.getMinutes();
+    var secs = '0' + d.getSeconds();
+
+    var t = mins.substr(-2) + ':' + secs.substr(-2);
+
+    var el = $('#playback-time');
+    el.text(t);
 }
 
 function playPositions() {
@@ -344,7 +369,7 @@ function playPositions() {
         updatePositions(currentData);
         updatePlaybackSlider();
 
-        if (playing) {
+        if (!draggingSlider && !paused) {
             currentFrame += 1;
         }
     }, UPDATE_INTERVAL_MS);
