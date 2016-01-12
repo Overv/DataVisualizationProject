@@ -499,6 +499,7 @@ function playPositions() {
         if (!draggingSlider && !paused) {
             lastSec = currentSec;
             currentFrame += $('#playback-speed').val() / 60;
+            currentFrame = Math.min(currentFrame, lastFrame);
         }
     }, UPDATE_INTERVAL_MS);
 }
