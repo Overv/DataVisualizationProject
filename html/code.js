@@ -33,6 +33,18 @@ var firstFrame, lastFrame;
 var draggingSlider = false;
 var paused = false;
 
+var playerDetails = {"1":{"name":"Zeki","sur":"Fryers","db":"9 Sep 1992 (Age 23)","nation":"England","height":"-","weight":"-","pos":"Left Back","shirtno":"35"},
+                     "2":{"name":"Kyle","sur":"Naughton","db":"11 Nov 1988 (Age 27)","nation":"England","height":"181 cm.","weight":"73 Kg.","pos":"Right Back","shirtno":"25"},
+                     "4":{"name":"Michael","sur":"Dawson","db":"18 Nov 1983 (Age 32)","nation":"England","height":"188 cm.","weight":"79 kg.","pos":"Center Back","shirtno":"5"},
+                     "5":{"name":"Roberto","sur":"Soldado","db":"27 May 1985 (Age 30)","nation":"Spain","height":"176 cm.","weight":"73 kg.","pos":"Forward/Striker","shirtno":"9"},
+                     "6":{"name":"Andros","sur":"Townsend","db":"16 Jul 1990 (Age 25)","nation":"England","height":"183 cm.","weight":"77 kg.","pos":"Right Winger","shirtno":"17"},
+                     "8":{"name":"Gylfi","sur":"Sigurdsson","db":"9 Sep 1989 (Age 26)","nation":"Iceland","height":"186 cm.","weight":"75 kg.","pos":"Left Winger","shirtno":"-"},
+                     "11":{"name":"Mousa","sur":"Dembele","db":"17 Jul 1987 (Age 29)","nation":"Belgium","height":"183 cm.","weight":"78 Kg.","pos":"Midfielder","shirtno":"19"},
+                     "12":{"name":"Naser","sur":"Chadli","db":"2 Sep 1989 (Age 26)","nation":"Belgium","height":"188 cm.","weight":"85 kg.","pos":"Attacking Midfielder","shirtno":"21"},
+                     "14":{"name":"Vlad lulian","sur":"Chiriches","db":"15 Nov 1989 (age 26)","nation":"Romania","height":"183 cm.","weight":"75 kg.","pos":"Center Back","shirtno":"6"},
+                    };
+
+
 function updatePositions(data, instanttransition) {
     // Update data
     var playerGroups = vis
@@ -54,6 +66,7 @@ function updatePositions(data, instanttransition) {
         .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; })
         .on('click', function(d, i) {
             showPlayerStats(i);
+            updateCard(i);
         });
 
     newPlayerGroups.append('circle')
@@ -137,7 +150,7 @@ function showPlayerStats(tagid) {
     var stats = d3.select("#stats")
     stats.append("select")
          .attr("id","selList")
-         .on("click",function(){changeGraph(tagid)});
+         .on("click",function(){changeGraph(tagid);});
     
     var list = d3.select("#selList");
 
@@ -161,6 +174,19 @@ function showPlayerStats(tagid) {
     //console.log(playerData);
 
     // the player's timestamp is in seconds from the start of the game
+}
+
+// a function to update the player's details in the card
+function updateCard(tagid){
+    d3.select("#details").style("display","block");
+    d3.select("#playerName").text(playerDetails[tagid].name+" "+playerDetails[tagid].sur);
+    d3.select("#playerBirth").text(playerDetails[tagid].db);
+    d3.select("#playerNation").text(playerDetails[tagid].nation);
+    d3.select("#playerHeight").text(playerDetails[tagid].height);
+    d3.select("#playerWeight").text(playerDetails[tagid].weight);
+    d3.select("#playerPos").text(playerDetails[tagid].pos);
+    d3.select("#playerNumber").text(playerDetails[tagid].shirtno);
+
 }
 
 
