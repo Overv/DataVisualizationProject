@@ -28,6 +28,14 @@ var yScale = d3.scale.linear()
     .domain([0, FIELD_HEIGHT])
     .range([350, 9]);
 
+var x3DScale = d3.scale.linear()
+    .domain([0, FIELD_WIDTH])
+    .range([-20.833/2, 20.833/2]);
+
+var y3DScale = d3.scale.linear()
+    .domain([0, FIELD_HEIGHT])
+    .range([13.922/2, -13.922/2]);
+
 var currentFrame = 0;
 var firstFrame, lastFrame;
 var draggingSlider = false;
@@ -44,7 +52,18 @@ function updatePositions(data, instanttransition) {
         .transition()
         .ease('linear')
         .duration(instanttransition ? 33 : (2000 / $('#playback-speed').val()))
-        .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; });
+        .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; })
+        .attr('data-x', function(d) { return d[COL_XPOS]; })
+        .attr('data-y', function(d) { return d[COL_YPOS]; })
+        .attrTween('data-direction', function(d, i, a) {
+            a = +a;
+
+            var angDiffDeg = (d[COL_DIRECTION] - a) / Math.PI * 180;
+            var shortestAngle = (((angDiffDeg % 360) + 540) % 360) - 180;
+            var shortestAngleRad = shortestAngle / 180 * Math.PI;
+
+            return d3.interpolate(a, a + shortestAngleRad);
+        });
 
     // Add new players
     var newPlayerGroups = playerGroups
@@ -52,6 +71,9 @@ function updatePositions(data, instanttransition) {
         .append('g')
         .attr('class', 'player')
         .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; })
+        .attr('data-x', function(d) { return d[COL_XPOS]; })
+        .attr('data-y', function(d) { return d[COL_YPOS]; })
+        .attr('data-direction', function(d) { return d[COL_DIRECTION]; })
         .on('click', function(d, i) {
             showPlayerStats(i);
         });
@@ -508,7 +530,7 @@ function playPositions() {
 function init3DField() {
     var renderer = new THREE.WebGLRenderer({canvas: $('#field3d')[0]});
     renderer.setSize(575, 360);
-    //renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled = true;
 
     var scene = new THREE.Scene();
 
@@ -527,49 +549,85 @@ function init3DField() {
                         netTexture.wrapT = THREE.RepeatWrapping;
                         netTexture.repeat.set(15, 15);
 
-                        var pitchMaterial = new THREE.MeshBasicMaterial({
+                        var pitchMaterial = new THREE.MeshLambertMaterial({
                             color: 0xffffff,
                             map: pitchTexture
                         });
                         var pitchMesh = new THREE.Mesh(pitchGeometry, pitchMaterial);
+                        pitchMesh.receiveShadow = true;
+                        pitchMesh.castShadow = true;
                         scene.add(pitchMesh);
 
-                        var postsMaterial = new THREE.MeshBasicMaterial({
+                        var postsMaterial = new THREE.MeshLambertMaterial({
                             color: 0xffffff
                         });
                         var postsMesh = new THREE.Mesh(postsGeometry, postsMaterial);
+                        postsMesh.castShadow = true;
+                        postsMesh.receiveShadow = false;
                         scene.add(postsMesh);
                         var postsMesh2 = new THREE.Mesh(postsGeometry, postsMaterial);
                         postsMesh2.rotation.y = Math.PI;
+                        postsMesh2.castShadow = true;
+                        postsMesh2.receiveShadow = false;
                         scene.add(postsMesh2);
 
-                        var netMaterial = new THREE.MeshBasicMaterial({
+                        var netMaterial = new THREE.MeshLambertMaterial({
                             color: 0xffffff,
                             map: netTexture,
                             side: THREE.DoubleSide,
                             transparent: true
                         });
                         var netMesh = new THREE.Mesh(netGeometry, netMaterial);
+                        netMesh.castShadow = true;
+                        netMesh.receiveShadow = false;
                         scene.add(netMesh);
                         var netMesh2 = new THREE.Mesh(netGeometry, netMaterial);
                         netMesh2.rotation.y = Math.PI;
+                        netMesh2.castShadow = true;
+                        netMesh2.receiveShadow = false;
                         scene.add(netMesh2);
+
+                        var light = new THREE.DirectionalLight(0xffffff, 2);
+                        light.position.set(0, 1, 0);
+                        scene.add(light);
 
                         var camera = new THREE.PerspectiveCamera(75, 575/360, 0.1, 1000);
                         camera.position.set(0, 10.5, 10.5);
                         camera.lookAt(new THREE.Vector3(0, -4, 0));
 
-                        var render = function() {
-                            requestAnimationFrame(render);
-
+                        (function render() {
+                            playersPreRender(scene);
                             renderer.render(scene, camera);
-                        };
+                            playersPostRender(scene);
 
-                        render();
+                            requestAnimationFrame(render);
+                        })();
                     });
                 });
             });
         });
+    });
+}
+
+function playersPreRender(scene) {
+    var playerGeometry = new THREE.BoxGeometry(0.5, 1, 0.2);
+    var playerMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
+
+    $('g.player').each(function() {
+        var x = x3DScale(+$(this).attr('data-x'));
+        var y = y3DScale(+$(this).attr('data-y'));
+        var dir = +$(this).attr('data-direction');
+
+        this.mesh = new THREE.Mesh(playerGeometry, playerMaterial);
+        this.mesh.position.set(x, 0.5, y);
+        this.mesh.rotation.y = dir;
+        scene.add(this.mesh);
+    });
+}
+
+function playersPostRender(scene) {
+    $('g.player').each(function() {
+        scene.remove(this.mesh);
     });
 }
 
