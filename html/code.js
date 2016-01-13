@@ -36,6 +36,10 @@ var y3DScale = d3.scale.linear()
     .domain([0, FIELD_HEIGHT])
     .range([13.922/2, -13.922/2]);
 
+var colorScale = d3.scale.linear()
+    .domain([0, 0.6, 1])
+    .range(['blue', 'yellow', 'red']);
+
 var currentFrame = 0;
 var firstFrame, lastFrame;
 var draggingSlider = false;
@@ -783,6 +787,10 @@ function init3DField() {
                         netMesh2.receiveShadow = false;
                         scene.add(netMesh2);
 
+                        $.getJSON('heatmap.json', function(grid) {
+                            create3DGraph(scene, grid);
+                        });
+
                         var light = new THREE.DirectionalLight(0xffffff, 2);
                         light.position.set(0, 1, 0);
                         scene.add(light);
@@ -825,6 +833,42 @@ function init3DField() {
             });
         });
     });
+}
+
+function create3DGraph(scene, grid) {
+    var geometry = new THREE.PlaneGeometry(20.833, 13.922, grid.length - 1, grid[0].length - 1);
+
+    var vertexColors = [];
+
+    for (var x = 0; x < grid.length; x++) {
+        for (var y = 0; y < grid[0].length; y++) {
+            var i = y * grid.length + x;
+            var val = Math.sqrt(grid[x][y]);
+            geometry.vertices[i].z = val * 3;
+            vertexColors[i] = new THREE.Color(colorScale(val));
+        }
+    }
+
+    for (var i = 0; i < geometry.faces.length; i++) {
+        var face = geometry.faces[i];
+
+        face.vertexColors[0] = vertexColors[face.a];
+        face.vertexColors[1] = vertexColors[face.b];
+        face.vertexColors[2] = vertexColors[face.c];
+    }
+
+    geometry.computeFaceNormals();
+
+    var material = new THREE.MeshBasicMaterial({
+        vertexColors: THREE.VertexColors,
+        opacity: 0.8,
+        transparent: true
+    });
+
+    var mesh = new THREE.Mesh(geometry, material);
+    mesh.rotation.set(-Math.PI / 2, 0, 0);
+    //mesh.position.set(0, 2, 0);
+    scene.add(mesh);
 }
 
 function updateSelected3DPlayer(camera, renderer) {
