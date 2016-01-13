@@ -74,6 +74,7 @@ function updatePositions(data, instanttransition) {
         .attr('data-x', function(d) { return d[COL_XPOS]; })
         .attr('data-y', function(d) { return d[COL_YPOS]; })
         .attr('data-direction', function(d) { return d[COL_DIRECTION]; })
+        .attr('data-id', function(d) { return d[COL_ID]; })
         .on('click', function(d, i) {
             showPlayerStats(i);
         });
@@ -528,7 +529,9 @@ function playPositions() {
 }
 
 function init3DField() {
-    var renderer = new THREE.WebGLRenderer({canvas: $('#field3d')[0]});
+    var canvas = $('#field3d')[0];
+
+    var renderer = new THREE.WebGLRenderer({canvas: canvas});
     renderer.setSize(575, 360);
     renderer.shadowMap.enabled = true;
 
@@ -595,10 +598,17 @@ function init3DField() {
                         camera.position.set(0, 10.5, 10.5);
                         camera.lookAt(new THREE.Vector3(0, -4, 0));
 
+                        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+                        controls.enableDamping = true;
+                        controls.dampingFactor = 0.25;
+                        controls.rotateSpeed = 0.5;
+
                         (function render() {
                             playersPreRender(scene);
                             renderer.render(scene, camera);
                             playersPostRender(scene);
+
+                            controls.update();
 
                             requestAnimationFrame(render);
                         })();
@@ -611,12 +621,19 @@ function init3DField() {
 
 function playersPreRender(scene) {
     var playerGeometry = new THREE.BoxGeometry(0.5, 1, 0.2);
-    var playerMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
 
     $('g.player').each(function() {
         var x = x3DScale(+$(this).attr('data-x'));
         var y = y3DScale(+$(this).attr('data-y'));
         var dir = +$(this).attr('data-direction');
+        var id = +$(this).attr('data-id');
+
+        var color = playerPosColor(id);
+        if (color === undefined) color = 'white';
+
+        var playerMaterial = new THREE.MeshLambertMaterial({
+            color: color
+        });
 
         this.mesh = new THREE.Mesh(playerGeometry, playerMaterial);
         this.mesh.position.set(x, 0.5, y);
