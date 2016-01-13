@@ -44,6 +44,39 @@ var playerDetails = {"1":{"name":"Zeki","sur":"Fryers","db":"9 Sep 1992 (Age 23)
                      "14":{"name":"Vlad lulian","sur":"Chiriches","db":"15 Nov 1989 (age 26)","nation":"Romania","height":"183 cm.","weight":"75 kg.","pos":"Center Back","shirtno":"6"},
                     };
 
+//the values are percentages
+var radarData={
+    labels: ["Pass Accuracy","Shot Accuracy","Cross Accuracy","Successful take ons","Tackle Accuracy"],
+    datasets: [
+        {
+            label: "Tottenham",
+            fillColor: "rgba(220,220,220,0.2)",
+            strokeColor: "rgba(220,220,220,1)",
+            pointColor: "rgba(220,220,220,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(220,220,220,1)",
+            data: [87,14,16,58,75]
+        },
+        {
+            label: "Tromso",
+            fillColor: "rgba(123, 220, 162, 0.2)",
+            strokeColor: "rgba(123, 220, 162, 1)",
+            pointColor: "rgba(123, 220, 162, 1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(123, 220, 162, 1);",
+            data: [68,42,25,25,75]
+        }
+    ]
+};
+
+
+//Radar Code Chart.js
+var canvas =document.getElementById("radarChart");
+var ctx=canvas.getContext("2d");
+var newChart = new Chart(ctx);
+var radarChart = newChart.Radar(radarData);
 
 function updatePositions(data, instanttransition) {
     // Update data
@@ -162,6 +195,10 @@ function showPlayerStats(tagid) {
         .attr("value","Speed")
         .text("Speed");
 
+    list.append("option")
+        .attr("value","Energy_Consumed")
+        .text("Energy_Consumed");
+
 
     
     //console.log(playerIdData.length);
@@ -233,6 +270,22 @@ function changeGraph(tagid){
             }
         }
     }
+    else if (option=="Energy_Consumed"){
+        
+        var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
+        //console.log(previousMin)
+        playerData.push([previousMin,playerIdData[0][COL_ENERGY]]);
+        //console.log("This is the previousMin" + previousMin);
+
+        for (var i=0 ; i<playerIdData.length; i++){
+            var curMin = Math.floor(playerIdData[i][COL_TIMESTAMP] / 60);
+            if(!(curMin==previousMin)){
+                playerData.push([curMin,playerIdData[i][COL_ENERGY]]);
+                previousMin=curMin;
+            }
+        }
+    }
+
 
     var xStatScale = d3.scale.linear()
                         .range([0,width]);
@@ -284,7 +337,8 @@ function changeGraph(tagid){
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor","end")
-            .text("Total_Distance");
+            //.text("Total_Distance");
+            .text(option);
 
     lineSvg.append("path")
            .datum(playerData)
