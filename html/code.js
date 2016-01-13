@@ -618,18 +618,18 @@ function init3DField() {
     var scene = new THREE.Scene();
 
     var loader = new THREE.JSONLoader();
-    loader.load('https://cdn.rawgit.com/Overv/DataVisualizationProject/master/html/models/pitch.json', function(pitchGeometry) {
-        loader.load('https://cdn.rawgit.com/Overv/DataVisualizationProject/master/html/models/goal_posts.json', function(postsGeometry) {
-            loader.load('https://cdn.rawgit.com/Overv/DataVisualizationProject/master/html/models/goal_net.json', function(netGeometry) {
+    loader.load('models/pitch.json', function(pitchGeometry) {
+        loader.load('models/goal_posts.json', function(postsGeometry) {
+            loader.load('models/goal_net.json', function(netGeometry) {
                 THREE.TextureLoader.prototype.crossOrigin = '';
                 
                 var loader = new THREE.TextureLoader();
-                loader.load('https://cdn.rawgit.com/Overv/DataVisualizationProject/master/html/textures/pitch_texture.jpg', function(pitchTexture) {
+                loader.load('textures/pitch_texture.jpg', function(pitchTexture) {
                     pitchTexture.wrapS = THREE.RepeatWrapping;
                     pitchTexture.wrapT = THREE.RepeatWrapping;
                     pitchTexture.repeat.set(1, 1);
 
-                    loader.load('https://cdn.rawgit.com/Overv/DataVisualizationProject/master/html/textures/net_texture.png', function(netTexture) {
+                    loader.load('textures/net_texture.png', function(netTexture) {
                         netTexture.wrapS = THREE.RepeatWrapping;
                         netTexture.wrapT = THREE.RepeatWrapping;
                         netTexture.repeat.set(15, 15);
