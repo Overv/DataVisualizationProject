@@ -752,7 +752,7 @@ function create3DGraph(scene, grid) {
         for (var y = 0; y < grid[0].length; y++) {
             var i = y * grid.length + x;
             var val = Math.sqrt(grid[x][y]);
-            geometry.vertices[i].z = val;
+            geometry.vertices[i].z = val * 3;
             vertexColors[i] = new THREE.Color(colorScale(val));
         }
     }
