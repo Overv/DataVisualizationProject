@@ -381,8 +381,16 @@ function changeGraph(tagid){
            .style("pointer-events", "all") 
            .on("mouseover", function() { focus.style("display", null); })
            .on("mouseout", function() { focus.style("display", "none"); })
-           .on("mousemove", mousemove);
+           .on("mousemove", mousemove)
+           .on("mousedown", function() { draggingSlider = true; })
+           .on("mouseup", function() { draggingSlider = false; })
+           .on("click", function() {
+                var x0 = xStatScale.invert(d3.mouse(this)[0]);
+                var i = bisectMinute(playerData, x0, 1);
 
+                currentFrame = firstFrame + i * 60;
+                updatePlaybackSlider(true);
+           });
 
      function mousemove() {                     
         var x0 = xStatScale.invert(d3.mouse(this)[0]),
@@ -483,6 +491,11 @@ function changeGraph(tagid){
          .attr("x2", width + width);
 
 
+            // Move to selected time
+            if (draggingSlider) {
+                currentFrame = firstFrame + i * 60;
+                updatePlaybackSlider(true);
+            }
         }//end of function mousemove
 
    
@@ -516,7 +529,7 @@ $.get(DATA_URL, function(csv) {
     playPositions();
 });
 
-function updatePlaybackSlider() {
+function updatePlaybackSlider(otherSlider) {
     var sliderEl = $('#playback-slider');
 
     if (lastFrame === undefined) {
@@ -550,7 +563,7 @@ function updatePlaybackSlider() {
         });
     }
 
-    if (!draggingSlider && !paused) {
+    if ((!draggingSlider && !paused) || otherSlider) {
         sliderEl.val(currentFrame);
         updatePlaybackTime();
     }
