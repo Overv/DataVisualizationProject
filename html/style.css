@@ -19,7 +19,30 @@
   stroke: #000;
 }
 
+#container {
+    width:1400px;
+    margin:20px auto;
+    overflow:auto; 
+}
 
+#fieldVis {
+    float:left;
+    width:600 px;
+}
+
+#statsContainer{
+    float:left;
+    width:600px;
+    margin-left: 30px;
+}
+
+#playerStatsContainer{
+    clear:both;
+}
+
+#teamStatsContainer{
+    clear:both;
+}
 
 .line {
   fill: none;
@@ -76,7 +99,7 @@ div#details table td{
     height: 300px;
 
     
-    background: blue;
+    background: white;
 
     color: white;
     font-family: sans-serif;
@@ -186,9 +209,8 @@ div#details table td{
     width: 575px;
     height: 360px;
 
-    display: block;
-    float: left;
-    margin-left: 10px;
+    
+    margin-top: 20px;
 
     border: 1px solid black;
 }

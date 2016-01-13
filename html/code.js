@@ -81,10 +81,17 @@ var radarData={
 
 
 //Radar Code Chart.js
+var options={
+  legendTemplate :  "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"><%if(datasets[i].label){%><%=datasets[i].label%></span><%}%></li><%}%></ul>"
+  };
+
 var canvas =document.getElementById("radarChart");
 var ctx=canvas.getContext("2d");
 var newChart = new Chart(ctx);
-var radarChart = newChart.Radar(radarData);
+var radarChart = newChart.Radar(radarData,options);
+
+var legend = radarChart.generateLegend();
+document.getElementById("radarLegend").innerHTML=legend;
 
 function updatePositions(data, instanttransition) {
     // Update data
@@ -196,7 +203,7 @@ function showPlayerStats(tagid) {
     // TODO
     //d3.select("svg.parent").selectAll("*").remove();
     d3.select("#stats").remove();
-    d3.select("body")
+    d3.select("#playerStatsContainer")
        .append("div")
        .attr("id","stats");
 
@@ -238,7 +245,7 @@ function showPlayerStats(tagid) {
 
 // a function to update the player's details in the card
 function updateCard(tagid){
-    d3.select("#details").style("display","block");
+    d3.select("#playerTable").style("display","block");
     d3.select("#playerName").text(playerDetails[tagid].name+" "+playerDetails[tagid].sur);
     d3.select("#playerBirth").text(playerDetails[tagid].db);
     d3.select("#playerNation").text(playerDetails[tagid].nation);

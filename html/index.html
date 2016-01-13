@@ -6,74 +6,102 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
         <link rel="stylesheet" href="style.css">
     </head>
-
+    
     <body>
-        <div id="field-container">
-            <svg id="field"></svg>
+    
 
-            <div id="playback-bar">
-                <input id="playback-button" type="button" value="Pause" />
-                <select id="playback-speed">
-                    <option value="1">1x</option>
-                    <option value="5">5x</option>
-                    <option value="15">15x</option>
-                    <option value="30">30x</option>
-                    <option value="60">60x</option>
-                </select>
-                <input id="playback-slider" type="range" min="0" max="100" value="0" />
-                <span id="playback-time">00:00</span>
+    <div id="container">
+        <H1 style="text-align:center"> Data Visualization Project 2015 - 2016</H1>
+        <div id="fieldVis">
+            
+            <div id="field-container">
+                <svg id="field"></svg>
+
+                <div id="playback-bar">
+                    <input id="playback-button" type="button" value="Pause" />
+                    <select id="playback-speed">
+                        <option value="1">1x</option>
+                        <option value="5">5x</option>
+                        <option value="15">15x</option>
+                        <option value="30">30x</option>
+                        <option value="60">60x</option>
+                    </select>
+                    <input id="playback-slider" type="range" min="0" max="100" value="0" />
+                    <span id="playback-time">00:00</span>
+                </div>
             </div>
-        </div>
+            
+            <div id="field3dcontainer">
+                <canvas id="field3d" width="575" height="360"></canvas>
+            </div>
         
-        <div id="details" style="display:none">
-            <table id="playerTable" cellspacing="0" cellpadding="3" >
-                <tbody>
-                    <tr>
-                        <td id="playerName"></td>
-                    </tr>
-                    <tr>
-                        <td>Date of Birth:</td>
-                        <td id="playerBirth" class="playerValue"> </td>
-                    </tr>
-                    <tr>
-                        <td>Nationality:</td>
-                        <td id="playerNation" class="playerValue"></td>
-                    </tr>
-                    <tr>
-                        <td>Height:</td>
-                        <td id="playerHeight" class="playerValue"></td>
-                    </tr>
-                    <tr>
-                        <td>Weight:</td>
-                        <td id="playerWeight" class="playerValue"></td>
-                    </tr>
-                    <tr>
-                        <td>Position:</td>
-                        <td id="playerPos" class="playerValue"></td>
-                    </tr>
-                    <tr>
-                        <td>Squad Number:</td>
-                        <td id="playerNumber" class="playerValue"></td>
-                    </tr>
-
-                </tbody>
-            </table>
         </div>
 
-        <div id="radarContainer" style="display:block">
-            <canvas id="radarChart" width="400" height="400"></canvas>
+        <div id="statsContainer">
+
+
+            <div id="teamStatsContainer">
+                <div id="radarContainer" style="display:block">
+                    <div id="radarLegend"></div>
+                    <canvas id="radarChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+
+
+            <div id="playerStatsContainer">
+                
+                <div id="details" >
+                    <table style="display:none" id="playerTable" cellspacing="0" cellpadding="3" >
+                        <tbody>
+                            <tr>
+                                <td id="playerName"></td>
+                            </tr>
+                            <tr>
+                                <td>Date of Birth:</td>
+                                <td id="playerBirth" class="playerValue"> </td>
+                            </tr>
+                            <tr>
+                                <td>Nationality:</td>
+                                <td id="playerNation" class="playerValue"></td>
+                            </tr>
+                            <tr>
+                                <td>Height:</td>
+                                <td id="playerHeight" class="playerValue"></td>
+                            </tr>
+                            <tr>
+                                <td>Weight:</td>
+                                <td id="playerWeight" class="playerValue"></td>
+                            </tr>
+                            <tr>
+                                <td>Position:</td>
+                                <td id="playerPos" class="playerValue"></td>
+                            </tr>
+                            <tr>
+                                <td>Squad Number:</td>
+                                <td id="playerNumber" class="playerValue"></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div id="stats"></div>
+            
+            </div>
+
         </div>
-           <canvas id="field3d" width="575" height="360"></canvas>
 
-        <div id="stats"></div>
-
+        
+        
 
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
-        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
+        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/ballControls.js"></script>
         <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
         <script src="https://d3js.org/d3.v3.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
         <script src="code.js"></script>
+
+    </div>
     </body>
 </html>
