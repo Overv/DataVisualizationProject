@@ -41,6 +41,9 @@ var firstFrame, lastFrame;
 var draggingSlider = false;
 var paused = false;
 
+//noone is selected at the beginning
+var selectedPlayer;
+
 var playerDetails = {"1":{"name":"Zeki","sur":"Fryers","db":"9 Sep 1992 (Age 23)","nation":"England","height":"-","weight":"-","pos":"Left Back","shirtno":"35"},
                      "2":{"name":"Kyle","sur":"Naughton","db":"11 Nov 1988 (Age 27)","nation":"England","height":"181 cm.","weight":"73 Kg.","pos":"Right Back","shirtno":"25"},
                      "4":{"name":"Michael","sur":"Dawson","db":"18 Nov 1983 (Age 32)","nation":"England","height":"188 cm.","weight":"79 kg.","pos":"Center Back","shirtno":"5"},
@@ -79,16 +82,39 @@ var radarData={
     ]
 };
 
+var barData = {
+    labels: ["pl1", "pl2", "pl3", "pl4", "pl5", "pl6", "pl7","pl8"],
+    datasets: [
+        {
+            label: "Player Names",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [0, 0, 0, 0, 0, 0, 0, 0]
+        }
+    ]
+};
 
 //Radar Code Chart.js
 var options={
   legendTemplate :  "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"><%if(datasets[i].label){%><%=datasets[i].label%></span><%}%></li><%}%></ul>"
   };
 
-var canvas =document.getElementById("radarChart");
-var ctx=canvas.getContext("2d");
-var newChart = new Chart(ctx);
+
+// display the the radar chart
+var radarCanvas =document.getElementById("radarChart");
+var ctxr=radarCanvas.getContext("2d");
+var newChart = new Chart(ctxr);
 var radarChart = newChart.Radar(radarData,options);
+
+//display the bar chart 
+var barCanvas = document.getElementById("barChart");
+var ctxb = barCanvas.getContext("2d");
+var newChart1 = new Chart(ctxb);
+var barChart = newChart1.Bar(barData);
+
+
 
 var legend = radarChart.generateLegend();
 document.getElementById("radarLegend").innerHTML=legend;
@@ -130,6 +156,7 @@ function updatePositions(data, instanttransition) {
         .on('click', function(d, i) {
             showPlayerStats(i);
             updateCard(i);
+            selectedPlayer=i;
         });
 
     newPlayerGroups.append('circle')
@@ -197,6 +224,62 @@ function playerPosColor(noPlayer){
             default:
                 return "black";
         }
+}
+
+function distanceToOthers(tagid){
+    //make it show the data at first
+    //depending on the the player selected we want for that 
+    //time frame the positions of this player to all other players
+    //console.log(currentFrame);
+    //console.log(playerDetails[tagid]);
+    //Get the second from the field visualization
+    var curSec = Math.floor(currentFrame);
+    var AllPlayersPositions = data.filter(function (row) {return row[COL_TIMESTAMP]==curSec});
+    var playingPlayersPos = []
+    for (var index=0 ; index<AllPlayersPositions.length; index++){
+        // get the id of the player from the 2d array
+        //valid ids : 1,2,4,5,6,8,11,12,14
+        var chosenPlayer;
+        var id = AllPlayersPositions[index][1];
+        if (id==1 || id ==2 || id==4 || id==5 || id==6 || id==8 || id==11 || id==12 || id==14){
+            
+            var x_pos = AllPlayersPositions[index][2];
+            var y_pos = AllPlayersPositions[index][3];
+            if (id==tagid){
+                chosenPlayer=[tagid,x_pos,y_pos];
+                //console.log("chosen player is "+ playerDetails[tagid].name);
+            }
+            //the positions should be sorted to the playing players ids 
+            playingPlayersPos.push([id,x_pos,y_pos]);
+        }
+    }
+    var distanceData=[]
+    for (var i=0 ; i<playingPlayersPos.length ; i++){
+        if (playingPlayersPos[i][0] == tagid){
+            continue;
+        }
+        else{
+            var dx= playingPlayersPos[i][1] - chosenPlayer[1];
+            var dy= playingPlayersPos[i][2] - chosenPlayer[2];
+            var distance = Math.sqrt( dx*dx + dy*dy);
+            distanceData.push([playingPlayersPos[i][0],distance]);
+        }
+    }
+    console.log(distanceData);
+    //console.log(playingPlayersPos);
+    var xLabels = [];
+
+    //console.log(barChart.datasets[0].bars[4]);
+
+    for (var i = 0 ; i<distanceData.length; i++){
+        xLabels.push(playerDetails[distanceData[i][0]].sur);
+        console.log(i);
+        barChart.datasets[0].bars[i].value = distanceData[i][1];
+    }
+    barChart.scale.xLabels=xLabels;
+    barChart.update();
+
+
 }
 
 function showPlayerStats(tagid) {
@@ -596,8 +679,11 @@ function playPositions() {
     var lastSec = -1;
     currentFrame = firstFrame;
     
+
+
     setInterval(function() {
         // Load next second
+        // get the current second
         var currentSec = Math.floor(currentFrame);
         if (currentSec != lastSec) {
             for (var i = 0; i < data.length; i++) {
@@ -624,6 +710,12 @@ function playPositions() {
         } else if (paused) {
             updatePositions(currentData, true);
         }
+        if (!paused){
+            if (selectedPlayer!=null) {
+                distanceToOthers(selectedPlayer);
+            }
+        }
+
     }, UPDATE_INTERVAL_MS);
 }
 
