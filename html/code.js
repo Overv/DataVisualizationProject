@@ -688,17 +688,51 @@ function init3DField() {
                         (function render() {
                             playersPreRender(scene);
                             renderer.render(scene, camera);
+                            updateSelected3DPlayer(camera, renderer);
                             playersPostRender(scene);
 
                             controls.update();
 
                             requestAnimationFrame(render);
                         })();
+
+                        $(canvas).mousemove(function(event) {
+                            renderer.mouseX = event.pageX - this.offsetLeft;
+                            renderer.mouseY = event.pageY - this.offsetTop;
+                        });
+
+                        $(canvas).click(function() {
+                            if (renderer.hoverPlayer.length > 0) {
+                                var i = renderer.hoverPlayer[0].object.playerId;
+
+                                showPlayerStats(i);
+                                updateCard(i);
+                            }
+                        });
                     });
                 });
             });
         });
     });
+}
+
+function updateSelected3DPlayer(camera, renderer) {
+    // Player picking
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2(
+        (renderer.mouseX / renderer.domElement.offsetWidth) * 2 - 1,
+        -(renderer.mouseY / renderer.domElement.offsetHeight) * 2 + 1
+    );
+
+    raycaster.setFromCamera(mouse, camera);
+
+    var objects = $('g.player').toArray().map(function(el) { return el.mesh; });
+    var intersects = raycaster.intersectObjects(objects, true);
+
+    renderer.hoverPlayer = intersects;
+
+    // Show pointer if hovering over player
+    $(renderer.domElement).css('cursor', renderer.hoverPlayer.length > 0 ? 'pointer' : 'default');
 }
 
 function playersPreRender(scene) {
@@ -720,6 +754,7 @@ function playersPreRender(scene) {
         this.mesh = new THREE.Mesh(playerGeometry, playerMaterial);
         this.mesh.position.set(x, 0.5, y);
         this.mesh.rotation.y = dir;
+        this.mesh.playerId = id;
         scene.add(this.mesh);
     });
 }
@@ -727,6 +762,7 @@ function playersPreRender(scene) {
 function playersPostRender(scene) {
     $('g.player').each(function() {
         scene.remove(this.mesh);
+        this.mesh = null;
     });
 }
 
