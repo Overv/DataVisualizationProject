@@ -8,21 +8,22 @@
     </head>
 
     <body>
-        <svg id="field"></svg>
+        <div id="field-container">
+            <svg id="field"></svg>
 
-        <div id="playback-bar">
-            <input id="playback-button" type="button" value="Pause" />
-            <select id="playback-speed">
-                <option value="1">1x</option>
-                <option value="5">5x</option>
-                <option value="15">15x</option>
-                <option value="30">30x</option>
-                <option value="60">60x</option>
-            </select>
-            <input id="playback-slider" type="range" min="0" max="100" value="0" />
-            <span id="playback-time">00:00</span>
+            <div id="playback-bar">
+                <input id="playback-button" type="button" value="Pause" />
+                <select id="playback-speed">
+                    <option value="1">1x</option>
+                    <option value="5">5x</option>
+                    <option value="15">15x</option>
+                    <option value="30">30x</option>
+                    <option value="60">60x</option>
+                </select>
+                <input id="playback-slider" type="range" min="0" max="100" value="0" />
+                <span id="playback-time">00:00</span>
+            </div>
         </div>
-
         
         <div id="details" style="display:none">
             <table id="playerTable" cellspacing="0" cellpadding="3" >
@@ -59,7 +60,14 @@
             </table>
         </div>
 
+        <canvas id="field3d" width="575" height="360"></canvas>
+
+        <div id="stats"></div>
+
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
+        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
+        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
         <script src="https://d3js.org/d3.v3.min.js"></script>
         <script src="code.js"></script>
     </body>
