@@ -769,7 +769,7 @@ function create3DGraph(scene, grid) {
 
     var material = new THREE.MeshBasicMaterial({
         vertexColors: THREE.VertexColors,
-        opacity: 0.8,
+        opacity: 0.5,
         transparent: true
     });
 
