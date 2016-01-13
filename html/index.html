@@ -60,15 +60,20 @@
             </table>
         </div>
 
-        <canvas id="field3d" width="575" height="360"></canvas>
+        <div id="radarContainer" style="display:block">
+            <canvas id="radarChart" width="400" height="400"></canvas>
+        </div>
+           <canvas id="field3d" width="575" height="360"></canvas>
 
         <div id="stats"></div>
+
 
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
         <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/TrackballControls.js"></script>
         <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
         <script src="https://d3js.org/d3.v3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
         <script src="code.js"></script>
     </body>
 </html>
