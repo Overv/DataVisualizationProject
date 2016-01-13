@@ -393,9 +393,8 @@ function changeGraph(tagid){
            .on("mouseup", function() { draggingSlider = false; })
            .on("click", function() {
                 var x0 = xStatScale.invert(d3.mouse(this)[0]);
-                var i = bisectMinute(playerData, x0, 1);
 
-                currentFrame = firstFrame + i * 60;
+                currentFrame = x0 * 60;
                 updatePlaybackSlider(true);
            });
 
@@ -500,7 +499,7 @@ function changeGraph(tagid){
 
             // Move to selected time
             if (draggingSlider) {
-                currentFrame = firstFrame + i * 60;
+                currentFrame = x0 * 60;
                 updatePlaybackSlider(true);
             }
         }//end of function mousemove
