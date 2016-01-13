@@ -388,8 +388,16 @@ function changeGraph(tagid){
            .style("pointer-events", "all") 
            .on("mouseover", function() { focus.style("display", null); })
            .on("mouseout", function() { focus.style("display", "none"); })
-           .on("mousemove", mousemove);
+           .on("mousemove", mousemove)
+           .on("mousedown", function() { draggingSlider = true; })
+           .on("mouseup", function() { draggingSlider = false; })
+           .on("click", function() {
+                var x0 = xStatScale.invert(d3.mouse(this)[0]);
+                var i = bisectMinute(playerData, x0, 1);
 
+                currentFrame = firstFrame + i * 60;
+                updatePlaybackSlider(true);
+           });
 
      function mousemove() {                     
         var x0 = xStatScale.invert(d3.mouse(this)[0]),
@@ -490,6 +498,11 @@ function changeGraph(tagid){
          .attr("x2", width + width);
 
 
+            // Move to selected time
+            if (draggingSlider) {
+                currentFrame = firstFrame + i * 60;
+                updatePlaybackSlider(true);
+            }
         }//end of function mousemove
 
    
@@ -523,7 +536,7 @@ $.get(DATA_URL, function(csv) {
     playPositions();
 });
 
-function updatePlaybackSlider() {
+function updatePlaybackSlider(otherSlider) {
     var sliderEl = $('#playback-slider');
 
     if (lastFrame === undefined) {
@@ -557,7 +570,7 @@ function updatePlaybackSlider() {
         });
     }
 
-    if (!draggingSlider && !paused) {
+    if ((!draggingSlider && !paused) || otherSlider) {
         sliderEl.val(currentFrame);
         updatePlaybackTime();
     }
@@ -695,17 +708,51 @@ function init3DField() {
                         (function render() {
                             playersPreRender(scene);
                             renderer.render(scene, camera);
+                            updateSelected3DPlayer(camera, renderer);
                             playersPostRender(scene);
 
                             controls.update();
 
                             requestAnimationFrame(render);
                         })();
+
+                        $(canvas).mousemove(function(event) {
+                            renderer.mouseX = event.pageX - this.offsetLeft;
+                            renderer.mouseY = event.pageY - this.offsetTop;
+                        });
+
+                        $(canvas).click(function() {
+                            if (renderer.hoverPlayer.length > 0) {
+                                var i = renderer.hoverPlayer[0].object.playerId;
+
+                                showPlayerStats(i);
+                                updateCard(i);
+                            }
+                        });
                     });
                 });
             });
         });
     });
+}
+
+function updateSelected3DPlayer(camera, renderer) {
+    // Player picking
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2(
+        (renderer.mouseX / renderer.domElement.offsetWidth) * 2 - 1,
+        -(renderer.mouseY / renderer.domElement.offsetHeight) * 2 + 1
+    );
+
+    raycaster.setFromCamera(mouse, camera);
+
+    var objects = $('g.player').toArray().map(function(el) { return el.mesh; });
+    var intersects = raycaster.intersectObjects(objects, true);
+
+    renderer.hoverPlayer = intersects;
+
+    // Show pointer if hovering over player
+    $(renderer.domElement).css('cursor', renderer.hoverPlayer.length > 0 ? 'pointer' : 'default');
 }
 
 function playersPreRender(scene) {
@@ -727,6 +774,7 @@ function playersPreRender(scene) {
         this.mesh = new THREE.Mesh(playerGeometry, playerMaterial);
         this.mesh.position.set(x, 0.5, y);
         this.mesh.rotation.y = dir;
+        this.mesh.playerId = id;
         scene.add(this.mesh);
     });
 }
@@ -734,6 +782,7 @@ function playersPreRender(scene) {
 function playersPostRender(scene) {
     $('g.player').each(function() {
         scene.remove(this.mesh);
+        this.mesh = null;
     });
 }
 
