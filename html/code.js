@@ -797,10 +797,9 @@ function playPositions() {
         } else if (paused) {
             updatePositions(currentData, true);
         }
-        if (!paused){
-            if (selectedPlayer!=null) {
-                distanceToOthers(selectedPlayer);
-            }
+        
+        if (selectedPlayer!=null) {
+            distanceToOthers(selectedPlayer);
         }
 
     }, UPDATE_INTERVAL_MS);
