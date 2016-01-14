@@ -169,6 +169,8 @@ function updatePositions(data, instanttransition) {
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('r', 10)
+        .attr('stroke', 'black')
+        .attr('stroke-width', '0')
         .style("fill",function(d,i){return playerPosColor(i);});
 
     newPlayerGroups.append('text')
@@ -279,7 +281,7 @@ function distanceToOthers(tagid){
 
     for (var i = 0 ; i<distanceData.length; i++){
         xLabels.push(playerDetails[distanceData[i][0]].sur);
-        console.log(i);
+        //console.log(i);
         barChart.datasets[0].bars[i].value = distanceData[i][1];
     }
     barChart.scale.xLabels=xLabels;
@@ -290,6 +292,17 @@ function distanceToOthers(tagid){
 
 function showPlayerStats(tagid) {
     selectedPlayer=tagid;
+
+    // Update selection circle
+    $('.player').each(function() {
+        var id = +this.getAttribute('data-id');
+
+        if (id == tagid) {
+            $(this).find('circle').attr('stroke-width', '3px');
+        } else {
+            $(this).find('circle').attr('stroke-width', '0');
+        }
+    });
 
     // TODO
     //d3.select("svg.parent").selectAll("*").remove();
