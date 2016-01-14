@@ -48,6 +48,9 @@ var paused = false;
 //noone is selected at the beginning
 var selectedPlayer;
 
+// 3D meshes representing the different heatmaps
+var heatmapMeshes = {};
+
 var playerDetails = {"1":{"name":"Zeki","sur":"Fryers","db":"9 Sep 1992 (Age 23)","nation":"England","height":"-","weight":"-","pos":"Left Back","shirtno":"35"},
                      "2":{"name":"Kyle","sur":"Naughton","db":"11 Nov 1988 (Age 27)","nation":"England","height":"181 cm.","weight":"73 Kg.","pos":"Right Back","shirtno":"25"},
                      "4":{"name":"Michael","sur":"Dawson","db":"18 Nov 1983 (Age 32)","nation":"England","height":"188 cm.","weight":"79 kg.","pos":"Center Back","shirtno":"5"},
@@ -787,8 +790,16 @@ function init3DField() {
                         netMesh2.receiveShadow = false;
                         scene.add(netMesh2);
 
-                        $.getJSON('heatmap.json', function(grid) {
-                            create3DGraph(scene, grid);
+                        $.getJSON('heatmaps/energy.json', function(grid) {
+                            create3DHeatmap(scene, 'energy', grid);
+                        });
+
+                        $.getJSON('heatmaps/position.json', function(grid) {
+                            create3DHeatmap(scene, 'position', grid);
+                        });
+
+                        $.getJSON('heatmaps/speed.json', function(grid) {
+                            create3DHeatmap(scene, 'speed', grid);
                         });
 
                         var light = new THREE.DirectionalLight(0xffffff, 2);
@@ -834,7 +845,7 @@ function init3DField() {
     });
 }
 
-function create3DGraph(scene, grid) {
+function create3DHeatmap(scene, name, grid) {
     var geometry = new THREE.PlaneGeometry(20.833, 13.922, grid.length - 1, grid[0].length - 1);
 
     var vertexColors = [];
@@ -842,7 +853,7 @@ function create3DGraph(scene, grid) {
     for (var x = 0; x < grid.length; x++) {
         for (var y = 0; y < grid[0].length; y++) {
             var i = y * grid.length + x;
-            var val = Math.sqrt(grid[x][y]);
+            var val = Math.sqrt(grid[x][grid[0].length - y]);
             geometry.vertices[i].z = val * 3;
             vertexColors[i] = new THREE.Color(colorScale(val));
         }
@@ -866,8 +877,10 @@ function create3DGraph(scene, grid) {
 
     var mesh = new THREE.Mesh(geometry, material);
     mesh.rotation.set(-Math.PI / 2, 0, 0);
-    //mesh.position.set(0, 2, 0);
+    mesh.visible = false;
     scene.add(mesh);
+
+    heatmapMeshes[name] = mesh;
 }
 
 function updateSelected3DPlayer(camera, renderer) {
@@ -917,3 +930,12 @@ function playersPreRender(scene) {
 }
 
 init3DField();
+
+// Event handler for heatmap selection
+$('#heatmap-selection').change(function() {
+    var selection = $(this).val();
+
+    for (var name in heatmapMeshes) {
+        heatmapMeshes[name].visible = name == selection;
+    }
+});

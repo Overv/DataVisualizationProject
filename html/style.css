@@ -151,7 +151,7 @@ div#details table td{
 }
 
 #playback-slider {
-    width: 390px;
+    width: 280px;
 
     position: relative;
     top: 3px;
@@ -184,7 +184,7 @@ div#details table td{
     top: -2px;
 }
 
-#playback-speed {
+select {
     position: relative;
     top: -2px;
 
