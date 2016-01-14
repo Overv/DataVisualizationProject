@@ -53,7 +53,7 @@ var selectedPlayer;
 // 3D meshes representing the different heatmaps
 var heatmapMeshes = {};
 
-var playerDetails = {"1":{"name":"Zeki","sur":"Fryers","db":"9 Sep 1992 (Age 23)","nation":"England","height":"-","weight":"-","pos":"Left Back","shirtno":"35"},
+var playerDetails = {"1":{"name":"Zeki","sur":"Fryers","db":"9 Sep 1992 (Age 23)","nation":"England","height":"183 cm.","weight":"77 Kg.","pos":"Left Back","shirtno":"35"},
                      "2":{"name":"Kyle","sur":"Naughton","db":"11 Nov 1988 (Age 27)","nation":"England","height":"181 cm.","weight":"73 Kg.","pos":"Right Back","shirtno":"25"},
                      "4":{"name":"Michael","sur":"Dawson","db":"18 Nov 1983 (Age 32)","nation":"England","height":"188 cm.","weight":"79 kg.","pos":"Center Back","shirtno":"5"},
                      "5":{"name":"Roberto","sur":"Soldado","db":"27 May 1985 (Age 30)","nation":"Spain","height":"176 cm.","weight":"73 kg.","pos":"Forward/Striker","shirtno":"9"},
