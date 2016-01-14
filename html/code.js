@@ -196,7 +196,7 @@ function updatePositions(data, instanttransition) {
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('r', 10)
-        .attr('stroke', 'black')
+        .attr('stroke', 'white')
         .attr('stroke-width', '0')
         .style("fill",function(d,i){return playerPosColor(i);});
 
@@ -392,6 +392,17 @@ function showPlayerStats(tagid) {
     // the player's timestamp is in seconds from the start of the game
 
     updateHeatmapSelection();
+
+    // Update 3D player selection
+    $('g.player').each(function() {
+        var id = +this.getAttribute('data-id');
+
+        if (id == tagid) {
+            this.selectMesh.visible = true;
+        } else {
+            this.selectMesh.visible = false;
+        }
+    });
 }
 
 // a function to update the player's details in the card
@@ -973,6 +984,7 @@ function updateSelected3DPlayer(camera, renderer) {
 
 function playersPreRender(scene) {
     var playerGeometry = new THREE.BoxGeometry(0.5, 1, 0.2);
+    var selectGeometry = new THREE.RingGeometry(0.3, 0.5, 32);
 
     $('g.player').each(function() {
         var x = x3DScale(+this.getAttribute('data-x'));
@@ -981,6 +993,7 @@ function playersPreRender(scene) {
         var id = +this.getAttribute('data-id');
 
         if (!this.mesh) {
+            // Main mesh
             var color = playerPosColor(id);
             if (color === undefined) color = 'white';
 
@@ -990,11 +1003,23 @@ function playersPreRender(scene) {
 
             this.mesh = new THREE.Mesh(playerGeometry, playerMaterial);
             scene.add(this.mesh);
+
+            // Selection mesh
+            var selectMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff
+            });
+
+            this.selectMesh = new THREE.Mesh(selectGeometry, selectMaterial);
+            this.selectMesh.visible = false;
+            scene.add(this.selectMesh);
         }
 
         this.mesh.position.set(x, 0.5, y);
         this.mesh.rotation.y = dir;
         this.mesh.playerId = id;
+
+        this.selectMesh.rotation.x = -Math.PI / 2;
+        this.selectMesh.position.set(x, 0.15, y);
     });
 }
 
