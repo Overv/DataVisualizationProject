@@ -163,7 +163,6 @@ function updatePositions(data, instanttransition) {
         .on('click', function(d, i) {
             showPlayerStats(i);
             updateCard(i);
-            selectedPlayer=i;
         });
 
     newPlayerGroups.append('circle')
@@ -272,7 +271,7 @@ function distanceToOthers(tagid){
             distanceData.push([playingPlayersPos[i][0],distance]);
         }
     }
-    console.log(distanceData);
+    //console.log(distanceData);
     //console.log(playingPlayersPos);
     var xLabels = [];
 
@@ -290,6 +289,8 @@ function distanceToOthers(tagid){
 }
 
 function showPlayerStats(tagid) {
+    selectedPlayer=tagid;
+
     // TODO
     //d3.select("svg.parent").selectAll("*").remove();
     d3.select("#stats").remove();
@@ -331,6 +332,8 @@ function showPlayerStats(tagid) {
     //console.log(playerData);
 
     // the player's timestamp is in seconds from the start of the game
+
+    updateHeatmapSelection();
 }
 
 // a function to update the player's details in the card
@@ -790,16 +793,17 @@ function init3DField() {
                         netMesh2.receiveShadow = false;
                         scene.add(netMesh2);
 
-                        $.getJSON('heatmaps/energy.json', function(grid) {
-                            create3DHeatmap(scene, 'energy', grid);
+                        // Create heatmap grids
+                        $.getJSON('heatmaps/energy.json', function(grids) {
+                            create3DHeatmaps(scene, 'energy', grids);
                         });
 
-                        $.getJSON('heatmaps/position.json', function(grid) {
-                            create3DHeatmap(scene, 'position', grid);
+                        $.getJSON('heatmaps/position.json', function(grids) {
+                            create3DHeatmaps(scene, 'position', grids);
                         });
 
-                        $.getJSON('heatmaps/speed.json', function(grid) {
-                            create3DHeatmap(scene, 'speed', grid);
+                        $.getJSON('heatmaps/speed.json', function(grids) {
+                            create3DHeatmaps(scene, 'speed', grids);
                         });
 
                         var light = new THREE.DirectionalLight(0xffffff, 2);
@@ -845,6 +849,13 @@ function init3DField() {
     });
 }
 
+function create3DHeatmaps(scene, name, grids) {
+    for (var i = 0; i < 16; i++) {
+        var m = create3DHeatmap(scene, name, grids[i]);
+        heatmapMeshes[i + ':' + name] = m;
+    }
+}
+
 function create3DHeatmap(scene, name, grid) {
     var geometry = new THREE.PlaneGeometry(20.833, 13.922, grid.length - 1, grid[0].length - 1);
 
@@ -880,7 +891,7 @@ function create3DHeatmap(scene, name, grid) {
     mesh.visible = false;
     scene.add(mesh);
 
-    heatmapMeshes[name] = mesh;
+    return mesh;
 }
 
 function updateSelected3DPlayer(camera, renderer) {
@@ -932,10 +943,18 @@ function playersPreRender(scene) {
 init3DField();
 
 // Event handler for heatmap selection
-$('#heatmap-selection').change(function() {
-    var selection = $(this).val();
+function updateHeatmapSelection() {
+    var selection = $('#heatmap-selection').val();
+
+    if (selectedPlayer) {
+        selection = selectedPlayer + ':' + selection;
+    } else {
+        selection = '0:' + selection;
+    }
 
     for (var name in heatmapMeshes) {
         heatmapMeshes[name].visible = name == selection;
     }
-});
+}
+
+$('#heatmap-selection').change(updateHeatmapSelection);

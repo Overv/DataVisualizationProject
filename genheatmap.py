@@ -21,21 +21,25 @@ step_size = 2
 x_steps = int(105 / step_size + 0.5)
 y_steps = int(68 / step_size + 0.5)
 
-grid = [[0 for y in range(y_steps)] for x in range(x_steps)]
+result = []
 
-for datum in data:
-    x = int(datum['x_pos'] / step_size)
-    y = int(datum['y_pos'] / step_size)
+for tag_id in range(16):
+    grid = [[0 for y in range(y_steps)] for x in range(x_steps)]
 
-    if x >= 0 and y >= 0 and x < x_steps and y < y_steps:
-        grid[x][y] += datum['energy']
+    for datum in data:
+        x = int(datum['x_pos'] / step_size)
+        y = int(datum['y_pos'] / step_size)
 
-# Normalize
-max_value = max(map(max, grid))
-grid = map(lambda r: map(lambda v: v / max_value, r), grid)
+        if x >= 0 and y >= 0 and x < x_steps and y < y_steps and (datum['tag_id'] == tag_id or tag_id == 0):
+            grid[x][y] += 1
+
+    # Normalize
+    max_value = max(map(max, grid))
+    if max_value != 0:
+        grid = map(lambda r: map(lambda v: v / max_value, r), grid)
+
+    result.append(grid)
 
 # Export
-with open('html/heatmap.json', 'w') as f:
-    json.dump(grid, f)
-
-print(max_value)
+with open('html/heatmaps/position.json', 'w') as f:
+    json.dump(result, f)
