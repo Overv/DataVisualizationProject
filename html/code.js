@@ -163,7 +163,6 @@ function updatePositions(data, instanttransition) {
         .attr('data-direction', function(d) { return d[COL_DIRECTION]; })
         .attr('data-id', function(d) { return d[COL_ID]; })
         .on('click', function(d, i) {
-            showPlayerStats(i);
             updateCard(i);
 
             if (selectedPlayer==null){
@@ -182,7 +181,7 @@ function updatePositions(data, instanttransition) {
         		}
         	}
         	else{
-        		console.log("New player hidden is false");
+        		//console.log("New player hidden is false");
         		if (hidden==true){
         			showGraphs();
         			hidden=false;
@@ -191,7 +190,7 @@ function updatePositions(data, instanttransition) {
         		
         	}
 
-        });
+        showPlayerStats(i);});
 
     newPlayerGroups.append('circle')
         .attr('cx', 0)
@@ -220,6 +219,7 @@ function disableSelection(){
 	selectedPlayer=null;
 	hideGraphs();
 	hidden=true;
+	showPlayerStats(null);
 }
 
 function hideGraphs(){
