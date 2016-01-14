@@ -808,7 +808,6 @@ function init3DField() {
                             playersPreRender(scene);
                             renderer.render(scene, camera);
                             updateSelected3DPlayer(camera, renderer);
-                            playersPostRender(scene);
 
                             controls.update();
 
@@ -894,30 +893,26 @@ function playersPreRender(scene) {
     var playerGeometry = new THREE.BoxGeometry(0.5, 1, 0.2);
 
     $('g.player').each(function() {
-        var x = x3DScale(+$(this).attr('data-x'));
-        var y = y3DScale(+$(this).attr('data-y'));
-        var dir = +$(this).attr('data-direction');
-        var id = +$(this).attr('data-id');
+        var x = x3DScale(+this.getAttribute('data-x'));
+        var y = y3DScale(+this.getAttribute('data-y'));
+        var dir = +this.getAttribute('data-direction');
+        var id = +this.getAttribute('data-id');
 
-        var color = playerPosColor(id);
-        if (color === undefined) color = 'white';
+        if (!this.mesh) {
+            var color = playerPosColor(id);
+            if (color === undefined) color = 'white';
 
-        var playerMaterial = new THREE.MeshLambertMaterial({
-            color: color
-        });
+            var playerMaterial = new THREE.MeshLambertMaterial({
+                color: color
+            });
 
-        this.mesh = new THREE.Mesh(playerGeometry, playerMaterial);
+            this.mesh = new THREE.Mesh(playerGeometry, playerMaterial);
+            scene.add(this.mesh);
+        }
+
         this.mesh.position.set(x, 0.5, y);
         this.mesh.rotation.y = dir;
         this.mesh.playerId = id;
-        scene.add(this.mesh);
-    });
-}
-
-function playersPostRender(scene) {
-    $('g.player').each(function() {
-        scene.remove(this.mesh);
-        this.mesh = null;
     });
 }
 
