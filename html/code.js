@@ -107,7 +107,12 @@ var barData = {
 
 //Radar Code Chart.js
 var options={
-  legendTemplate :  "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"><%if(datasets[i].label){%><%=datasets[i].label%></span><%}%></li><%}%></ul>"
+  legendTemplate :  "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"back,ground-color:<%=datasets[i].fillColor%>\"><%if(datasets[i].label){%><%=datasets[i].label%></span><%}%></li><%}%></ul>",
+  scaleOverride: true,
+    scaleSteps: 10,
+    scaleStepWidth: 10,
+    scaleStartValue: 0,
+    animation: false
   };
 
 
@@ -460,17 +465,32 @@ function changeGraph(tagid){
         }
     }
     else if (option=="Speed"){
-        
-        var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
-        //console.log(previousMin)
-        playerData.push([previousMin,playerIdData[0][COL_SPEED]]);
-        //console.log("This is the previousMin" + previousMin);
+        var points = [];
+        var quantity = [];
 
-        for (var i=0 ; i<playerIdData.length; i++){
+        for (var i = 0; i < playerIdData.length; i++) {
             var curMin = Math.floor(playerIdData[i][COL_TIMESTAMP] / 60);
-            if(!(curMin==previousMin)){
-                playerData.push([curMin,playerIdData[i][COL_SPEED]]);
-                previousMin=curMin;
+
+            if (!points[curMin]) {
+                points[curMin] = 0;
+                quantity[curMin] = 0;
+            }
+
+            points[curMin] += playerIdData[i][COL_SPEED];
+            quantity[curMin]++;
+        }
+
+        // Average and add to graph
+        var playerData = [];
+
+        for (var i = 0; i < points.length; i++) {
+            if (!points[i]) {
+                points[i] = 0;
+            }
+
+            if (quantity[i]) {
+                points[i] = points[i] / quantity[i];
+                playerData.push([i, points[i]]);
             }
         }
     }
