@@ -45,6 +45,8 @@ var firstFrame, lastFrame;
 var draggingSlider = false;
 var paused = false;
 
+var hidden = false;
+
 //noone is selected at the beginning
 var selectedPlayer;
 
@@ -94,8 +96,8 @@ var barData = {
     datasets: [
         {
             label: "Player Names",
-            fillColor: "rgba(220,220,220,0.5)",
-            strokeColor: "rgba(220,220,220,0.8)",
+            fillColor: "rgba(245, 112, 139, 0.6)",
+            strokeColor: "rgba(245, 112, 139, 0.9)",
             highlightFill: "rgba(220,220,220,0.75)",
             highlightStroke: "rgba(220,220,220,1)",
             data: [0, 0, 0, 0, 0, 0, 0, 0]
@@ -163,6 +165,32 @@ function updatePositions(data, instanttransition) {
         .on('click', function(d, i) {
             showPlayerStats(i);
             updateCard(i);
+
+            if (selectedPlayer==null){
+            	selectedPlayer=i;
+            	return;
+            }
+            if (selectedPlayer==i){
+            	if (hidden==true){
+            		showGraphs();
+            		hidden = false;
+            	}
+            	else{
+            		// the same player was selected again
+            		hideGraphs();
+            		hidden=true;
+        		}
+        	}
+        	else{
+        		console.log("New player hidden is false");
+        		if (hidden==true){
+        			showGraphs();
+        			hidden=false;
+        		}
+        		selectedPlayer=i;
+        		
+        	}
+
         });
 
     newPlayerGroups.append('circle')
@@ -186,6 +214,23 @@ function updatePositions(data, instanttransition) {
     playerGroups
         .exit()
         .remove();
+}
+
+function disableSelection(){
+	selectedPlayer=null;
+	hideGraphs();
+	hidden=true;
+}
+
+function hideGraphs(){
+	d3.select("#barContainer").style("display","none");
+	d3.select("#playerStatsContainer").style("display","none");
+
+}
+
+function showGraphs(){
+	d3.select("#barContainer").style("display","block");
+	d3.select("#playerStatsContainer").style("display","block");
 }
 
 function playerPosText(noPlayer){
