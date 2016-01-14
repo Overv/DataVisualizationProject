@@ -1,0 +1,78 @@
+\documentclass{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{soul}
+\usepackage{float}
+\usepackage{amsmath}
+
+\usepackage[sc]{mathpazo}
+\linespread{1.20}         % Palatino needs more leading (space between lines)
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{listings}
+\usepackage{courier}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{light-gray}{gray}{0.95}
+
+\lstset{basicstyle=\footnotesize\ttfamily,breaklines=true,language=Prolog}
+\lstset{frame=single,commentstyle=\color{mygreen}}
+\lstset{aboveskip=0.5cm,belowskip=0.3cm}
+\lstset{backgroundcolor=\color{light-gray}}
+
+\hypersetup{pdfpagemode=UseNone}
+
+\newcommand{\manager}{\texttt{manager} }
+\newcommand{\eagent}{\texttt{elevator agent} }
+\newcommand{\eagents}{\texttt{elevator agents} }
+\newcommand{\todo}[1] {\hl{TODO: #1}}
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
+\setlength{\parindent}{0cm}
+
+\title{ 	
+		\usefont{OT1}{bch}{b}{n}
+		\normalfont \normalsize \textsc{Delft University of Technology \protect\\ Data Visualization 2015-2016} \\ [25pt]
+		\horrule{0.5pt} \\[0.4cm]
+		\huge Football Match Visualization Project \\
+		\horrule{2pt} \\[0.5cm]
+}
+\author{
+		\normalfont 								\normalsize
+        Afentoulidis Grigorios 4521862\\[-3pt]		\normalsize
+        Overvoorde Alexander 4153235 \\
+        \today
+}
+\date{}
+\begin{document}
+\lstset{language=Prolog}
+\maketitle
+
+\section{Introduction}
+The goal of our visualizations is to get insight into the performance of a team during a football match. In that respect we have chosen a data set of a match which contains the data about the positions of the players as well as the energy, speed, heading and direction \cite{data}. More specific our objective was to provide a deeper understanding of how a team is moving in the field during a game. Also we wanted to highlight player specific statistics that reveal individual performance metrics. Finally we opted to show some overall match statistics that help to compare the teams that participated in the game.
+
+The dataset is collected from wearable sensors during a match that measure position, speed, energy and other details. One caveat is that the quality of the data set is not always perfect, which translates to missing values (like players missing). Another limit is that the sensors were only worn by the home team, so we have no direct insight into the performance of the other team. Code for the project can be found here \cite{code}.
+
+\section{Visualizations}
+\subsection{2d Field Visualization}
+The most straightforward visualization of the data is a scatterplot of the positions of the players on the field throughout time. Since player positions are thought of as categorical data we have chosen color hue to be our channel that enables user to discriminate the players\textquoteright  positions in the field. Also a circle with an appropriate radius was adopted to reflect the area of influence of each player. The value of this visualization lies on the fact that allows the user to have an overview of the trajectories and the positions of the players throughtout the game. This is achieved by a playback functionality that controls the visualization speed and also enables play/pause options.  They can view moves at various granularities by controlling the playback speed all the way from realtime to a minute per second. All of these features together enhance spatiotemporial analytics.
+
+\subsection{3d Field Visualization}
+To also better understand the perspective of the player, we also added a 3D version of the field visualization that allows the user to move the camera to match the view of the players. Because text legibility is an important issue with 3D visualizations, we decided to only use the color to identify the role of players. We \textquoteright ve also set up our layout so that the user can see both the 2D and 3D visualizations at the same time. That means that information is never occluded. We avoided interactivity complexity by just including simple pan and rotate camera controls.
+
+\subsection{Heatmap}
+All of the visualizations described so far show \textquoteleft heat of the moment \textquoteright data to the user. To also get insight into the performance of the entire team or a specific player throughout the match, we\textquoteright ve included a heatmap that indicates the position, speed and energy use at different positions on the field. This heatmap can be enabled as an overlay for the 3D field visualization to easily match the data with the overall spatial behaviour.
+
+\subsection{Radar Chart}
+In the radar chart our intention is to visualize the performance of each team to key statistics of the game. We also want to be able to compare it with an easy and quick way. In this visualization each axis shows in terms of length how good a team performed for a specific statistic. Also the area channel helps to have a general view of the team performance by means of larger surface. We have also chosen appropriate colors and opacity values in that way that when the areas are overlapping it can be still clear to which team each area is referring.
+
+\subsection{Bar Chart}
+The previously mentioned visualizations highlight either the team as a whole or a specific player. The relations between players through time are also important and that\textquoteright  s why we added a bar chart that displays the distance between the selected player and other players based on the currently selected time. This makes it easy to compare which players play most closely together with a certain player.
+
+\subsection{Line Graphs}
+Line graphs are the final visualization related to player specific statistics. They visualize the temporal change of energy, speed and total distance covered per minute steps. Because of the nature of the data previously described we found line charts as the most appropriate as they reveal relationships between the values in the order of the minutes passed in the game. In that way we can more easily explore trends with regard to the players\textquoteright fitness.
+
+\bibliographystyle{ieeetr}
+\bibliography{report_group23}
+\end{document}
