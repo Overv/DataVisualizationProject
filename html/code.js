@@ -943,7 +943,7 @@ function create3DHeatmap(scene, name, grid) {
     for (var x = 0; x < grid.length; x++) {
         for (var y = 0; y < grid[0].length; y++) {
             var i = y * grid.length + x;
-            var val = Math.sqrt(grid[x][grid[0].length - y]);
+            var val = Math.sqrt(grid[x][grid[0].length - 1 - y]);
             geometry.vertices[i].z = val * 3;
             vertexColors[i] = new THREE.Color(colorScale(val));
         }
