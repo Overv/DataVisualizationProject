@@ -116,7 +116,7 @@ var radarChart = newChart.Radar(radarData,options);
 var barCanvas = document.getElementById("barChart");
 var ctxb = barCanvas.getContext("2d");
 var newChart1 = new Chart(ctxb);
-var barChart = newChart1.Bar(barData);
+var barChart = newChart1.Bar(barData, {animationSteps: 5});
 
 
 
