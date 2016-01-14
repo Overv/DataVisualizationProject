@@ -914,6 +914,8 @@ function init3DField() {
                         camera.lookAt(new THREE.Vector3(0, -4, 0));
 
                         var controls = new THREE.OrbitControls(camera, renderer.domElement);
+                        controls.minPolarAngle = 0;
+                        controls.maxPolarAngle = Math.PI / 2;
                         controls.enableDamping = true;
                         controls.dampingFactor = 0.25;
                         controls.rotateSpeed = 0.5;
