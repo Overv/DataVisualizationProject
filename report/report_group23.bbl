@@ -1,0 +1,14 @@
+\begin{thebibliography}{1}
+
+\bibitem{data}
+S.~A. Pettersen, D.~Johansen, H.~Johansen, V.~Berg-Johansen, V.~R. Gaddam,
+  A.~Mortensen, R.~Langseth, C.~Griwodz, H.~K. Stensland, and P.~Halvorsen,
+  ``Soccer video and player position dataset,'' in {\em Proceedings of the 5th
+  ACM Multimedia Systems Conference}, MMSys '14, (New York, NY, USA),
+  pp.~18--23, ACM, 2014.
+
+\bibitem{code}
+G.Afentoulidis and A.Overvoorde, ``Data visualization project.''
+  \url{https://github.com/Overv/DataVisualizationProject}, 2016.
+
+\end{thebibliography}
