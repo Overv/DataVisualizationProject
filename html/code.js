@@ -356,6 +356,10 @@ function showPlayerStats(tagid) {
     });
 
     if (tagid) {
+        distanceToOthers(tagid);
+    }
+
+    if (tagid) {
         // TODO
         //d3.select("svg.parent").selectAll("*").remove();
         d3.select("#stats").remove();
@@ -786,6 +790,10 @@ function playPositions() {
                 }
             }
 
+            if (selectedPlayer!=null) {
+                distanceToOthers(selectedPlayer);
+            }
+
             updatePositions(currentData, draggingSlider);
             updatePlaybackSlider();
         }
@@ -797,11 +805,6 @@ function playPositions() {
         } else if (paused) {
             updatePositions(currentData, true);
         }
-        
-        if (selectedPlayer!=null) {
-            distanceToOthers(selectedPlayer);
-        }
-
     }, UPDATE_INTERVAL_MS);
 }
 
@@ -1013,7 +1016,7 @@ function playersPreRender(scene) {
 
             // Selection mesh
             var selectMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffffff
+                color: 0xff0000
             });
 
             this.selectMesh = new THREE.Mesh(selectGeometry, selectMaterial);
