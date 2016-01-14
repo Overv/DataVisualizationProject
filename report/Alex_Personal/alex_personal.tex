@@ -58,7 +58,7 @@
 I wrote a Python script that took the position, energy and speed data and generated team and per-player heatmaps from these as 2D grids with values scaled from 0 to 1. These are stored as arrays in JSON format. I visualized these with three.js (figure \ref{fig:3dvis}) by creating a plane and deforming it based on the heatmap value. The color is calculated using a d3.js scale. I created the field models (pitch, goals) with Blender. I implemented the camera movement by taking the code from the three.js OrbitControls example.
 \\ \\
 The players are simply cube geometry and are positioned based on the interpolated positions in the 2D visualization. They are also rotated based on the direction of the player. To make this work properly with the transitions I implemented a custom \verb#attrTween# function that finds the shortest angle so that a player rotating from 350 degrees to 5 degrees doesn't turn all the way around.
-\\
+\\ \\
 Player selection is implemented by assigning the ID to each player mesh as JavaScript object property and using a raycast to find which player is under the cursor when the user clicks.
 
 \section{2D visualization}
