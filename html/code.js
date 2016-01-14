@@ -50,6 +50,9 @@ var hidden = false;
 //noone is selected at the beginning
 var selectedPlayer;
 
+// 3D meshes representing the different heatmaps
+var heatmapMeshes = {};
+
 var playerDetails = {"1":{"name":"Zeki","sur":"Fryers","db":"9 Sep 1992 (Age 23)","nation":"England","height":"-","weight":"-","pos":"Left Back","shirtno":"35"},
                      "2":{"name":"Kyle","sur":"Naughton","db":"11 Nov 1988 (Age 27)","nation":"England","height":"181 cm.","weight":"73 Kg.","pos":"Right Back","shirtno":"25"},
                      "4":{"name":"Michael","sur":"Dawson","db":"18 Nov 1983 (Age 32)","nation":"England","height":"188 cm.","weight":"79 kg.","pos":"Center Back","shirtno":"5"},
@@ -118,7 +121,7 @@ var radarChart = newChart.Radar(radarData,options);
 var barCanvas = document.getElementById("barChart");
 var ctxb = barCanvas.getContext("2d");
 var newChart1 = new Chart(ctxb);
-var barChart = newChart1.Bar(barData);
+var barChart = newChart1.Bar(barData, {animationSteps: 5});
 
 
 
@@ -162,6 +165,7 @@ function updatePositions(data, instanttransition) {
         .on('click', function(d, i) {
             showPlayerStats(i);
             updateCard(i);
+
             if (selectedPlayer==null){
             	selectedPlayer=i;
             	return;
@@ -186,12 +190,15 @@ function updatePositions(data, instanttransition) {
         		selectedPlayer=i;
         		
         	}
+
         });
 
     newPlayerGroups.append('circle')
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('r', 10)
+        .attr('stroke', 'black')
+        .attr('stroke-width', '0')
         .style("fill",function(d,i){return playerPosColor(i);});
 
     newPlayerGroups.append('text')
@@ -311,7 +318,7 @@ function distanceToOthers(tagid){
             distanceData.push([playingPlayersPos[i][0],distance]);
         }
     }
-    console.log(distanceData);
+    //console.log(distanceData);
     //console.log(playingPlayersPos);
     var xLabels = [];
 
@@ -319,7 +326,7 @@ function distanceToOthers(tagid){
 
     for (var i = 0 ; i<distanceData.length; i++){
         xLabels.push(playerDetails[distanceData[i][0]].sur);
-        console.log(i);
+        //console.log(i);
         barChart.datasets[0].bars[i].value = distanceData[i][1];
     }
     barChart.scale.xLabels=xLabels;
@@ -329,6 +336,19 @@ function distanceToOthers(tagid){
 }
 
 function showPlayerStats(tagid) {
+    selectedPlayer=tagid;
+
+    // Update selection circle
+    $('.player').each(function() {
+        var id = +this.getAttribute('data-id');
+
+        if (id == tagid) {
+            $(this).find('circle').attr('stroke-width', '3px');
+        } else {
+            $(this).find('circle').attr('stroke-width', '0');
+        }
+    });
+
     // TODO
     //d3.select("svg.parent").selectAll("*").remove();
     d3.select("#stats").remove();
@@ -370,6 +390,8 @@ function showPlayerStats(tagid) {
     //console.log(playerData);
 
     // the player's timestamp is in seconds from the start of the game
+
+    updateHeatmapSelection();
 }
 
 // a function to update the player's details in the card
@@ -829,8 +851,17 @@ function init3DField() {
                         netMesh2.receiveShadow = false;
                         scene.add(netMesh2);
 
-                        $.getJSON('heatmap.json', function(grid) {
-                            create3DGraph(scene, grid);
+                        // Create heatmap grids
+                        $.getJSON('heatmaps/energy.json', function(grids) {
+                            create3DHeatmaps(scene, 'energy', grids);
+                        });
+
+                        $.getJSON('heatmaps/position.json', function(grids) {
+                            create3DHeatmaps(scene, 'position', grids);
+                        });
+
+                        $.getJSON('heatmaps/speed.json', function(grids) {
+                            create3DHeatmaps(scene, 'speed', grids);
                         });
 
                         var light = new THREE.DirectionalLight(0xffffff, 2);
@@ -850,7 +881,6 @@ function init3DField() {
                             playersPreRender(scene);
                             renderer.render(scene, camera);
                             updateSelected3DPlayer(camera, renderer);
-                            playersPostRender(scene);
 
                             controls.update();
 
@@ -877,7 +907,14 @@ function init3DField() {
     });
 }
 
-function create3DGraph(scene, grid) {
+function create3DHeatmaps(scene, name, grids) {
+    for (var i = 0; i < 16; i++) {
+        var m = create3DHeatmap(scene, name, grids[i]);
+        heatmapMeshes[i + ':' + name] = m;
+    }
+}
+
+function create3DHeatmap(scene, name, grid) {
     var geometry = new THREE.PlaneGeometry(20.833, 13.922, grid.length - 1, grid[0].length - 1);
 
     var vertexColors = [];
@@ -885,7 +922,7 @@ function create3DGraph(scene, grid) {
     for (var x = 0; x < grid.length; x++) {
         for (var y = 0; y < grid[0].length; y++) {
             var i = y * grid.length + x;
-            var val = Math.sqrt(grid[x][y]);
+            var val = Math.sqrt(grid[x][grid[0].length - y]);
             geometry.vertices[i].z = val * 3;
             vertexColors[i] = new THREE.Color(colorScale(val));
         }
@@ -903,14 +940,16 @@ function create3DGraph(scene, grid) {
 
     var material = new THREE.MeshBasicMaterial({
         vertexColors: THREE.VertexColors,
-        opacity: 0.8,
+        opacity: 0.5,
         transparent: true
     });
 
     var mesh = new THREE.Mesh(geometry, material);
     mesh.rotation.set(-Math.PI / 2, 0, 0);
-    //mesh.position.set(0, 2, 0);
+    mesh.visible = false;
     scene.add(mesh);
+
+    return mesh;
 }
 
 function updateSelected3DPlayer(camera, renderer) {
@@ -936,31 +975,44 @@ function playersPreRender(scene) {
     var playerGeometry = new THREE.BoxGeometry(0.5, 1, 0.2);
 
     $('g.player').each(function() {
-        var x = x3DScale(+$(this).attr('data-x'));
-        var y = y3DScale(+$(this).attr('data-y'));
-        var dir = +$(this).attr('data-direction');
-        var id = +$(this).attr('data-id');
+        var x = x3DScale(+this.getAttribute('data-x'));
+        var y = y3DScale(+this.getAttribute('data-y'));
+        var dir = +this.getAttribute('data-direction');
+        var id = +this.getAttribute('data-id');
 
-        var color = playerPosColor(id);
-        if (color === undefined) color = 'white';
+        if (!this.mesh) {
+            var color = playerPosColor(id);
+            if (color === undefined) color = 'white';
 
-        var playerMaterial = new THREE.MeshLambertMaterial({
-            color: color
-        });
+            var playerMaterial = new THREE.MeshLambertMaterial({
+                color: color
+            });
 
-        this.mesh = new THREE.Mesh(playerGeometry, playerMaterial);
+            this.mesh = new THREE.Mesh(playerGeometry, playerMaterial);
+            scene.add(this.mesh);
+        }
+
         this.mesh.position.set(x, 0.5, y);
         this.mesh.rotation.y = dir;
         this.mesh.playerId = id;
-        scene.add(this.mesh);
-    });
-}
-
-function playersPostRender(scene) {
-    $('g.player').each(function() {
-        scene.remove(this.mesh);
-        this.mesh = null;
     });
 }
 
 init3DField();
+
+// Event handler for heatmap selection
+function updateHeatmapSelection() {
+    var selection = $('#heatmap-selection').val();
+
+    if (selectedPlayer) {
+        selection = selectedPlayer + ':' + selection;
+    } else {
+        selection = '0:' + selection;
+    }
+
+    for (var name in heatmapMeshes) {
+        heatmapMeshes[name].visible = name == selection;
+    }
+}
+
+$('#heatmap-selection').change(updateHeatmapSelection);
