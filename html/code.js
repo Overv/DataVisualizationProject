@@ -167,30 +167,36 @@ function updatePositions(data, instanttransition) {
 
             if (selectedPlayer==null){
             	selectedPlayer=i;
-            	return;
-            }
-            if (selectedPlayer==i){
-            	if (hidden==true){
-            		showGraphs();
-            		hidden = false;
+                if (hidden) {
+                    showGraphs();
+                    hidden = false;
+                }
+            } else {
+                if (selectedPlayer==i){
+                	if (hidden==true){
+                		showGraphs();
+                		hidden = false;
+                	}
+                	else{
+                		// the same player was selected again
+                		hideGraphs();
+                        i = null;
+                		hidden=true;
+            		}
             	}
             	else{
-            		// the same player was selected again
-            		hideGraphs();
-            		hidden=true;
-        		}
-        	}
-        	else{
-        		//console.log("New player hidden is false");
-        		if (hidden==true){
-        			showGraphs();
-        			hidden=false;
-        		}
-        		selectedPlayer=i;
-        		
-        	}
+            		//console.log("New player hidden is false");
+            		if (hidden==true){
+            			showGraphs();
+            			hidden=false;
+            		}
+            		selectedPlayer=i;
+            		
+            	}
+            }
 
-        showPlayerStats(i);});
+            showPlayerStats(i);
+        });
 
     newPlayerGroups.append('circle')
         .attr('cx', 0)
@@ -349,47 +355,49 @@ function showPlayerStats(tagid) {
         }
     });
 
-    // TODO
-    //d3.select("svg.parent").selectAll("*").remove();
-    d3.select("#stats").remove();
-    d3.select("#playerStatsContainer")
-       .append("div")
-       .attr("id","stats");
+    if (tagid) {
+        // TODO
+        //d3.select("svg.parent").selectAll("*").remove();
+        d3.select("#stats").remove();
+        d3.select("#playerStatsContainer")
+           .append("div")
+           .attr("id","stats");
 
-    //Append a selection box to change between total distance 
-    // and speed of the player per minute
-    //d3.select("#selList").node().value == "Total_Distance"
-    var stats = d3.select("#stats")
-    stats.append("select")
-         .attr("id","selList")
-         .on("click",function(){changeGraph(tagid);});
-    
-    var list = d3.select("#selList");
+        //Append a selection box to change between total distance 
+        // and speed of the player per minute
+        //d3.select("#selList").node().value == "Total_Distance"
+        var stats = d3.select("#stats")
+        stats.append("select")
+             .attr("id","selList")
+             .on("click",function(){changeGraph(tagid);});
+        
+        var list = d3.select("#selList");
 
-    list.append("option")
-        .attr("value","Total_Distance")
-        .text("Total_Distance");
+        list.append("option")
+            .attr("value","Total_Distance")
+            .text("Total_Distance");
 
-    list.append("option")
-        .attr("value","Speed")
-        .text("Speed");
+        list.append("option")
+            .attr("value","Speed")
+            .text("Speed");
 
-    list.append("option")
-        .attr("value","Energy_Consumed")
-        .text("Energy_Consumed");
+        list.append("option")
+            .attr("value","Energy_Consumed")
+            .text("Energy_Consumed");
 
 
-    
-    //console.log(playerIdData.length);
+        
+        //console.log(playerIdData.length);
 
-    //console.log(playerIdData);
-    //the option of the user in the selection box
-    changeGraph(tagid);
+        //console.log(playerIdData);
+        //the option of the user in the selection box
+        changeGraph(tagid);
 
-    //console.log(playerData.length);
-    //console.log(playerData);
+        //console.log(playerData.length);
+        //console.log(playerData);
 
-    // the player's timestamp is in seconds from the start of the game
+        // the player's timestamp is in seconds from the start of the game
+    }
 
     updateHeatmapSelection();
 
