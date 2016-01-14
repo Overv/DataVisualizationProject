@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.12)  14 JAN 2016 14:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (MiKTeX 2.9) (preloaded format=pdflatex 2015.9.12)  14 JAN 2016 14:32
 entering extended mode
 **alex_personal.tex
 (alex_personal.tex
@@ -337,6 +337,30 @@ Package graphics Info: Driver file: pdftex.def on input line 94.
 \Gin@req@height=\dimen132
 \Gin@req@width=\dimen133
 )
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption.sty"
+Package: caption 2015/09/17 v3.3-111 Customizing captions (AR)
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\caption3.sty"
+Package: caption3 2015/09/20 v1.7-115 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+\captionmargin=\dimen134
+\captionmargin@=\dimen135
+\captionwidth=\dimen136
+\caption@tempdima=\dimen137
+\caption@indent=\dimen138
+\caption@parindent=\dimen139
+\caption@hangindent=\dimen140
+)
+\c@ContinuedFloat=\count124
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: listings package is loaded.
+)
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\caption\subcaption.sty"
+Package: subcaption 2015/09/15 v1.1-100 Sub-captions (AR)
+\c@subfigure=\count125
+\c@subtable=\count126
+)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
 File: lstlang1.sty 2015/06/04 1.6 listings language file
 )
@@ -344,21 +368,21 @@ File: lstlang1.sty 2015/06/04 1.6 listings language file
 File: lstlang2.sty 2015/06/04 1.6 listings language file
 )
 (alex_personal.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Try loading font information for T1+pplx on input line 49.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Try loading font information for T1+pplx on input line 51.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1pplx.fd"
 File: t1pplx.fd 2004/09/06 font definitions for T1/pplx.
@@ -399,35 +423,35 @@ File: t1pplx.fd 2004/09/06 font definitions for T1/pplx.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count124
-\scratchdimen=\dimen134
+\scratchcounter=\count127
+\scratchdimen=\dimen141
 \scratchbox=\box32
-\nofMPsegments=\count125
-\nofMParguments=\count126
+\nofMPsegments=\count128
+\nofMParguments=\count129
 \everyMPshowfont=\toks30
-\MPscratchCnt=\count127
-\MPscratchDim=\dimen135
-\MPnumerator=\count128
-\makeMPintoPDFobject=\count129
+\MPscratchCnt=\count130
+\MPscratchDim=\dimen142
+\MPnumerator=\count131
+\makeMPintoPDFobject=\count132
 \everyMPtoPDFconversion=\toks31
 )
 \AtBeginShipoutBox=\box33
-Package hyperref Info: Link coloring OFF on input line 49.
+Package hyperref Info: Link coloring OFF on input line 51.
  ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\gettitlestring.sty"
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count130
+\c@section@level=\count133
 )
-LaTeX Info: Redefining \ref on input line 49.
-LaTeX Info: Redefining \pageref on input line 49.
-LaTeX Info: Redefining \nameref on input line 49.
+LaTeX Info: Redefining \ref on input line 51.
+LaTeX Info: Redefining \pageref on input line 51.
+LaTeX Info: Redefining \nameref on input line 51.
 
 (alex_personal.out) (alex_personal.out)
 \@outlinefile=\write3
-LaTeX Info: Redefining \microtypecontext on input line 49.
+LaTeX Info: Redefining \microtypecontext on input line 51.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -441,8 +465,14 @@ Package microtype Info: No adjustment of character kerning.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\microtype\mt-ppl.cfg"
 File: mt-ppl.cfg 2005/11/16 v1.6 microtype config. file: Palatino (RS)
 )
-\c@lstlisting=\count131
-LaTeX Font Info:    Try loading font information for OT1+bch on input line 52.
+\c@lstlisting=\count134
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstlang1.sty"
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+LaTeX Font Info:    Try loading font information for OT1+bch on input line 54.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1bch.fd"
 File: ot1bch.fd 2004/10/18 font definitions for OT1/bch.
@@ -454,31 +484,31 @@ File: mt-bch.cfg 2007/03/03 v1.5 microtype config. file: Bitstream Charter (RS)
 Package microtype Info: Character `029' is missing
 (microtype)             in font `T1/pplx/m/sc/10'.
 (microtype)             Ignoring protrusion settings for this character.
-LaTeX Font Info:    Try loading font information for OT1+pplx on input line 52.
+LaTeX Font Info:    Try loading font information for OT1+pplx on input line 54.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1pplx.fd"
 File: ot1pplx.fd 2004/09/06 font definitions for OT1/pplx.
 )
-LaTeX Font Info:    Try loading font information for OML+zplm on input line 52.
+LaTeX Font Info:    Try loading font information for OML+zplm on input line 54.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omlzplm.fd"
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Try loading font information for OMS+zplm on input line 52.
+LaTeX Font Info:    Try loading font information for OMS+zplm on input line 54.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omszplm.fd"
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Try loading font information for OMX+zplm on input line 52.
+LaTeX Font Info:    Try loading font information for OMX+zplm on input line 54.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\omxzplm.fd"
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
-LaTeX Font Info:    Try loading font information for OT1+zplm on input line 52.
+LaTeX Font Info:    Try loading font information for OT1+zplm on input line 54.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ot1zplm.fd"
@@ -492,56 +522,66 @@ Package microtype Info: Loading generic settings for font family
 
 {C:/Users/Alexander/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
 LaTeX Font Info:    Font shape `T1/pplx/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/pplx/b/n' tried instead on input line 55.
+(Font)              Font shape `T1/pplx/b/n' tried instead on input line 56.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 60.
 
-<3dvis.png, id=19, 434.37282pt x 271.76532pt>
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1pcr.fd"
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+)
+Package microtype Info: Loading generic settings for font family
+(microtype)             `pcr' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--63
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 66--69
+
+ []
+
+LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <8> not available
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 71.
+<3dvis.png, id=20, 434.37282pt x 271.76532pt>
 File: 3dvis.png Graphic file (type png)
  <use 3dvis.png>
-Package pdftex.def Info: 3dvis.png used on input line 61.
-(pdftex.def)             Requested size: 238.90578pt x 149.47137pt.
+Package pdftex.def Info: 3dvis.png used on input line 78.
+(pdftex.def)             Requested size: 211.3883pt x 132.25801pt.
 
 <2dvis.png, id=21, 434.37282pt x 301.8778pt>
 File: 2dvis.png Graphic file (type png)
  <use 2dvis.png>
-Package pdftex.def Info: 2dvis.png used on input line 72.
-(pdftex.def)             Requested size: 238.90578pt x 166.0333pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 77.
- [2pdfTeX warning (ext4): destination with the same identifier (name{figure.1})
- has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.77 \end{document}
-                   pdfTeX warning (ext4): destination with the same identifier 
-(name{figure.2}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.77 \end{document}
-                    <./3dvis.png> <./2dvis.png>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 77.
+Package pdftex.def Info: 2dvis.png used on input line 84.
+(pdftex.def)             Requested size: 211.3883pt x 146.91263pt.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 90.
+ [2 <./3dvis.png> <./2dvis.png>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 90.
  (alex_personal.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 77.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 77.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 90.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 90.
 Package rerunfilecheck Info: File `alex_personal.out' has not changed.
 (rerunfilecheck)             Checksum: 201E88FEE3F9D8AA59D93345ECF10F30;104.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 77.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 90.
  ) 
 Here is how much of TeX's memory you used:
- 9386 strings out of 493673
- 140917 string characters out of 3141518
- 284759 words of memory out of 3000000
- 12539 multiletter control sequences out of 15000+200000
- 31551 words of font info for 87 fonts, out of 3000000 for 9000
+ 10753 strings out of 493673
+ 164259 string characters out of 3141518
+ 320899 words of memory out of 3000000
+ 13884 multiletter control sequences out of 15000+200000
+ 41291 words of font info for 108 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 30i,7n,40p,578b,333s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,8n,40p,567b,1201s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Progra
 m Files (x86)/MiKTeX 2.9/fonts/type1/public/fpl/fplrc8a.pfb><C:/Program Files (
-x86)/MiKTeX 2.9/fonts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86)/MiK
-TeX 2.9/fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on alex_personal.pdf (2 pages, 228161 bytes).
+x86)/MiKTeX 2.9/fonts/type1/urw/courier/ucrb8a.pfb><C:/Program Files (x86)/MiKT
+eX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/urw/palatino/uplb8a.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type
+1/urw/palatino/uplr8a.pfb>
+Output written on alex_personal.pdf (2 pages, 251942 bytes).
 PDF statistics:
- 45 PDF objects out of 1000 (max. 8388607)
- 7 named destinations out of 1000 (max. 500000)
- 23067 words of extra memory for PDF output out of 24883 (max. 10000000)
+ 54 PDF objects out of 1000 (max. 8388607)
+ 8 named destinations out of 1000 (max. 500000)
+ 31259 words of extra memory for PDF output out of 35830 (max. 10000000)
 
