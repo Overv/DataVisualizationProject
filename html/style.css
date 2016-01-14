@@ -202,3 +202,9 @@ div#details table td{
 
     border: 1px solid black;
 }
+
+text {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}

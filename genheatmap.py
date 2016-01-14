@@ -25,13 +25,20 @@ result = []
 
 for tag_id in range(16):
     grid = [[0 for y in range(y_steps)] for x in range(x_steps)]
+    qnt = [[0 for y in range(y_steps)] for x in range(x_steps)]
 
     for datum in data:
         x = int(datum['x_pos'] / step_size)
         y = int(datum['y_pos'] / step_size)
 
         if x >= 0 and y >= 0 and x < x_steps and y < y_steps and (datum['tag_id'] == tag_id or tag_id == 0):
-            grid[x][y] += 1
+            grid[x][y] += datum['speed']
+            qnt[x][y] += 1
+
+    # Average
+    for x in range(x_steps):
+        for y in range(y_steps):
+            grid[x][y] /= qnt[x][y] if qnt[x][y] > 0 else 1
 
     # Normalize
     max_value = max(map(max, grid))
@@ -41,5 +48,5 @@ for tag_id in range(16):
     result.append(grid)
 
 # Export
-with open('html/heatmaps/position.json', 'w') as f:
+with open('html/heatmaps/speed.json', 'w') as f:
     json.dump(result, f)

@@ -107,7 +107,12 @@ var barData = {
 
 //Radar Code Chart.js
 var options={
-  legendTemplate :  "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].fillColor%>\"><%if(datasets[i].label){%><%=datasets[i].label%></span><%}%></li><%}%></ul>"
+  legendTemplate :  "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"back,ground-color:<%=datasets[i].fillColor%>\"><%if(datasets[i].label){%><%=datasets[i].label%></span><%}%></li><%}%></ul>",
+  scaleOverride: true,
+    scaleSteps: 10,
+    scaleStepWidth: 10,
+    scaleStartValue: 0,
+    animation: false
   };
 
 
@@ -167,30 +172,36 @@ function updatePositions(data, instanttransition) {
 
             if (selectedPlayer==null){
             	selectedPlayer=i;
-            	return;
-            }
-            if (selectedPlayer==i){
-            	if (hidden==true){
-            		showGraphs();
-            		hidden = false;
+                if (hidden) {
+                    showGraphs();
+                    hidden = false;
+                }
+            } else {
+                if (selectedPlayer==i){
+                	if (hidden==true){
+                		showGraphs();
+                		hidden = false;
+                	}
+                	else{
+                		// the same player was selected again
+                		hideGraphs();
+                        i = null;
+                		hidden=true;
+            		}
             	}
             	else{
-            		// the same player was selected again
-            		hideGraphs();
-            		hidden=true;
-        		}
-        	}
-        	else{
-        		//console.log("New player hidden is false");
-        		if (hidden==true){
-        			showGraphs();
-        			hidden=false;
-        		}
-        		selectedPlayer=i;
-        		
-        	}
+            		//console.log("New player hidden is false");
+            		if (hidden==true){
+            			showGraphs();
+            			hidden=false;
+            		}
+            		selectedPlayer=i;
+            		
+            	}
+            }
 
-        showPlayerStats(i);});
+            showPlayerStats(i);
+        });
 
     newPlayerGroups.append('circle')
         .attr('cx', 0)
@@ -349,47 +360,53 @@ function showPlayerStats(tagid) {
         }
     });
 
-    // TODO
-    //d3.select("svg.parent").selectAll("*").remove();
-    d3.select("#stats").remove();
-    d3.select("#playerStatsContainer")
-       .append("div")
-       .attr("id","stats");
+    if (tagid) {
+        distanceToOthers(tagid);
+    }
 
-    //Append a selection box to change between total distance 
-    // and speed of the player per minute
-    //d3.select("#selList").node().value == "Total_Distance"
-    var stats = d3.select("#stats")
-    stats.append("select")
-         .attr("id","selList")
-         .on("click",function(){changeGraph(tagid);});
-    
-    var list = d3.select("#selList");
+    if (tagid) {
+        // TODO
+        //d3.select("svg.parent").selectAll("*").remove();
+        d3.select("#stats").remove();
+        d3.select("#playerStatsContainer")
+           .append("div")
+           .attr("id","stats");
 
-    list.append("option")
-        .attr("value","Total_Distance")
-        .text("Total_Distance");
+        //Append a selection box to change between total distance 
+        // and speed of the player per minute
+        //d3.select("#selList").node().value == "Total_Distance"
+        var stats = d3.select("#stats")
+        stats.append("select")
+             .attr("id","selList")
+             .on("click",function(){changeGraph(tagid);});
+        
+        var list = d3.select("#selList");
 
-    list.append("option")
-        .attr("value","Speed")
-        .text("Speed");
+        list.append("option")
+            .attr("value","Total_Distance")
+            .text("Total_Distance");
 
-    list.append("option")
-        .attr("value","Energy_Consumed")
-        .text("Energy_Consumed");
+        list.append("option")
+            .attr("value","Speed")
+            .text("Speed");
+
+        list.append("option")
+            .attr("value","Energy_Consumed")
+            .text("Energy_Consumed");
 
 
-    
-    //console.log(playerIdData.length);
+        
+        //console.log(playerIdData.length);
 
-    //console.log(playerIdData);
-    //the option of the user in the selection box
-    changeGraph(tagid);
+        //console.log(playerIdData);
+        //the option of the user in the selection box
+        changeGraph(tagid);
 
-    //console.log(playerData.length);
-    //console.log(playerData);
+        //console.log(playerData.length);
+        //console.log(playerData);
 
-    // the player's timestamp is in seconds from the start of the game
+        // the player's timestamp is in seconds from the start of the game
+    }
 
     updateHeatmapSelection();
 
@@ -448,17 +465,32 @@ function changeGraph(tagid){
         }
     }
     else if (option=="Speed"){
-        
-        var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
-        //console.log(previousMin)
-        playerData.push([previousMin,playerIdData[0][COL_SPEED]]);
-        //console.log("This is the previousMin" + previousMin);
+        var points = [];
+        var quantity = [];
 
-        for (var i=0 ; i<playerIdData.length; i++){
+        for (var i = 0; i < playerIdData.length; i++) {
             var curMin = Math.floor(playerIdData[i][COL_TIMESTAMP] / 60);
-            if(!(curMin==previousMin)){
-                playerData.push([curMin,playerIdData[i][COL_SPEED]]);
-                previousMin=curMin;
+
+            if (!points[curMin]) {
+                points[curMin] = 0;
+                quantity[curMin] = 0;
+            }
+
+            points[curMin] += playerIdData[i][COL_SPEED];
+            quantity[curMin]++;
+        }
+
+        // Average and add to graph
+        var playerData = [];
+
+        for (var i = 0; i < points.length; i++) {
+            if (!points[i]) {
+                points[i] = 0;
+            }
+
+            if (quantity[i]) {
+                points[i] = points[i] / quantity[i];
+                playerData.push([i, points[i]]);
             }
         }
     }
@@ -778,6 +810,10 @@ function playPositions() {
                 }
             }
 
+            if (selectedPlayer!=null) {
+                distanceToOthers(selectedPlayer);
+            }
+
             updatePositions(currentData, draggingSlider);
             updatePlaybackSlider();
         }
@@ -789,12 +825,6 @@ function playPositions() {
         } else if (paused) {
             updatePositions(currentData, true);
         }
-        if (!paused){
-            if (selectedPlayer!=null) {
-                distanceToOthers(selectedPlayer);
-            }
-        }
-
     }, UPDATE_INTERVAL_MS);
 }
 
@@ -933,7 +963,7 @@ function create3DHeatmap(scene, name, grid) {
     for (var x = 0; x < grid.length; x++) {
         for (var y = 0; y < grid[0].length; y++) {
             var i = y * grid.length + x;
-            var val = Math.sqrt(grid[x][grid[0].length - y]);
+            var val = Math.sqrt(grid[x][grid[0].length - 1 - y]);
             geometry.vertices[i].z = val * 3;
             vertexColors[i] = new THREE.Color(colorScale(val));
         }
@@ -1006,7 +1036,7 @@ function playersPreRender(scene) {
 
             // Selection mesh
             var selectMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffffff
+                color: 0xff0000
             });
 
             this.selectMesh = new THREE.Mesh(selectGeometry, selectMaterial);
