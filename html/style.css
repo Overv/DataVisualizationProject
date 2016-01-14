@@ -184,7 +184,7 @@ div#details table td{
     top: -2px;
 }
 
-select {
+#playback-bar select {
     position: relative;
     top: -2px;
 
