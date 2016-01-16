@@ -168,38 +168,11 @@ function updatePositions(data, instanttransition) {
         .attr('data-direction', function(d) { return d[COL_DIRECTION]; })
         .attr('data-id', function(d) { return d[COL_ID]; })
         .on('click', function(d, i) {
-            updateCard(i);
-
-            if (selectedPlayer==null){
-            	selectedPlayer=i;
-                if (hidden) {
-                    showGraphs();
-                    hidden = false;
-                }
-            } else {
-                if (selectedPlayer==i){
-                	if (hidden==true){
-                		showGraphs();
-                		hidden = false;
-                	}
-                	else{
-                		// the same player was selected again
-                		hideGraphs();
-                        i = null;
-                		hidden=true;
-            		}
-            	}
-            	else{
-            		//console.log("New player hidden is false");
-            		if (hidden==true){
-            			showGraphs();
-            			hidden=false;
-            		}
-            		selectedPlayer=i;
-            		
-            	}
+            if (selectedPlayer == i || !playerDetails[i]) {
+                i = null;
             }
 
+            updateCard(i);
             showPlayerStats(i);
         });
 
@@ -227,9 +200,6 @@ function updatePositions(data, instanttransition) {
 }
 
 function disableSelection(){
-	selectedPlayer=null;
-	hideGraphs();
-	hidden=true;
 	showPlayerStats(null);
 }
 
@@ -347,6 +317,12 @@ function distanceToOthers(tagid){
 }
 
 function showPlayerStats(tagid) {
+    if (tagid) {
+        showGraphs();
+    } else {
+        hideGraphs();
+    }
+
     selectedPlayer=tagid;
 
     // Update selection circle
@@ -424,15 +400,16 @@ function showPlayerStats(tagid) {
 
 // a function to update the player's details in the card
 function updateCard(tagid){
-    d3.select("#playerTable").style("display","block");
-    d3.select("#playerName").text(playerDetails[tagid].name+" "+playerDetails[tagid].sur);
-    d3.select("#playerBirth").text(playerDetails[tagid].db);
-    d3.select("#playerNation").text(playerDetails[tagid].nation);
-    d3.select("#playerHeight").text(playerDetails[tagid].height);
-    d3.select("#playerWeight").text(playerDetails[tagid].weight);
-    d3.select("#playerPos").text(playerDetails[tagid].pos);
-    d3.select("#playerNumber").text(playerDetails[tagid].shirtno);
-
+    if (tagid) {
+        d3.select("#playerTable").style("display","block");
+        d3.select("#playerName").text(playerDetails[tagid].name+" "+playerDetails[tagid].sur);
+        d3.select("#playerBirth").text(playerDetails[tagid].db);
+        d3.select("#playerNation").text(playerDetails[tagid].nation);
+        d3.select("#playerHeight").text(playerDetails[tagid].height);
+        d3.select("#playerWeight").text(playerDetails[tagid].weight);
+        d3.select("#playerPos").text(playerDetails[tagid].pos);
+        d3.select("#playerNumber").text(playerDetails[tagid].shirtno);
+    }
 }
 
 
@@ -939,8 +916,12 @@ function init3DField() {
                             if (renderer.hoverPlayer.length > 0) {
                                 var i = renderer.hoverPlayer[0].object.playerId;
 
-                                showPlayerStats(i);
+                                if (selectedPlayer == i || !playerDetails[i]) {
+                                    i = null;
+                                }
+
                                 updateCard(i);
+                                showPlayerStats(i);
                             }
                         });
                     });
