@@ -264,24 +264,20 @@ function distanceToOthers(tagid){
     //make it show the data at first
     //depending on the the player selected we want for that 
     //time frame the positions of this player to all other players
-    //console.log(currentFrame);
-    //console.log(playerDetails[tagid]);
     //Get the second from the field visualization
     var curSec = Math.floor(currentFrame);
     var AllPlayersPositions = data.filter(function (row) {return row[COL_TIMESTAMP]==curSec});
     var playingPlayersPos = []
     for (var index=0 ; index<AllPlayersPositions.length; index++){
         // get the id of the player from the 2d array
-        //valid ids : 1,2,4,5,6,8,11,12,14
         var chosenPlayer;
         var id = AllPlayersPositions[index][1];
-        if (id==1 || id ==2 || id==4 || id==5 || id==6 || id==8 || id==11 || id==12 || id==14){
+        if (playerDetails[id]){
             
             var x_pos = AllPlayersPositions[index][2];
             var y_pos = AllPlayersPositions[index][3];
             if (id==tagid){
                 chosenPlayer=[tagid,x_pos,y_pos];
-                //console.log("chosen player is "+ playerDetails[tagid].name);
             }
             //the positions should be sorted to the playing players ids 
             playingPlayersPos.push([id,x_pos,y_pos]);
@@ -299,15 +295,11 @@ function distanceToOthers(tagid){
             distanceData.push([playingPlayersPos[i][0],distance]);
         }
     }
-    //console.log(distanceData);
-    //console.log(playingPlayersPos);
     var xLabels = [];
 
-    //console.log(barChart.datasets[0].bars[4]);
 
     for (var i = 0 ; i<distanceData.length; i++){
         xLabels.push(playerDetails[distanceData[i][0]].sur);
-        //console.log(i);
         barChart.datasets[0].bars[i].value = distanceData[i][1];
     }
     barChart.scale.xLabels=xLabels;
@@ -372,14 +364,10 @@ function showPlayerStats(tagid) {
 
 
         
-        //console.log(playerIdData.length);
 
-        //console.log(playerIdData);
         //the option of the user in the selection box
         changeGraph(tagid);
 
-        //console.log(playerData.length);
-        //console.log(playerData);
 
         // the player's timestamp is in seconds from the start of the game
     }
@@ -429,9 +417,7 @@ function changeGraph(tagid){
     if (option =="Total_Distance"){
         
         var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
-        //console.log(previousMin)
         playerData.push([previousMin,playerIdData[0][COL_TOTALDISTANCE]]);
-        //console.log("This is the previousMin" + previousMin);
 
         for (var i=0 ; i<playerIdData.length; i++){
             var curMin = Math.floor(playerIdData[i][COL_TIMESTAMP] / 60);
@@ -474,9 +460,7 @@ function changeGraph(tagid){
     else if (option=="Energy_Consumed"){
         
         var previousMin = Math.floor(playerIdData[0][COL_TIMESTAMP] / 60);
-        //console.log(previousMin)
         playerData.push([previousMin,playerIdData[0][COL_ENERGY]]);
-        //console.log("This is the previousMin" + previousMin);
 
         for (var i=0 ; i<playerIdData.length; i++){
             var curMin = Math.floor(playerIdData[i][COL_TIMESTAMP] / 60);
@@ -575,7 +559,6 @@ function changeGraph(tagid){
             d0 = playerData[i - 1],
             d1 = playerData[i],
             d = x0 - d0[0] > d1[0] - x0 ? d1 : d0;
-        //console.log("Position of x is"+x0);
         focus.select("circle.y")
             .attr("transform",
                   "translate(" + xStatScale(d[0]) + "," + 
