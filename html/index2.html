@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Football Visualization</title>
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="style2.css">
+    </head>
+
+    <body>
+        <div id="header">
+            <span class="fa fa-futbol-o"></span>
+            Football Match Visualization
+        </div>
+
+        <div id="contents">
+            <div id="vis-player">
+                <div id="vis-2d">
+                    <img src="aspectratio.png" />
+                    <svg id="field"></svg>
+                </div>
+
+                <div id="vis-controls">
+                    <input type="checkbox" id="control-play" checked />
+                    <label class="fa fa-pause-circle" id="control-play-icon-on" for="control-play"></label>
+                    <label class="fa fa-play-circle" id="control-play-icon-off" for="control-play"></label>
+
+                    <select id="control-speed">
+                        <option value="1">1&times;</option>
+                        <option value="5">5&times;</option>
+                        <option value="15">15&times;</option>
+                        <option value="30">30&times;</option>
+                        <option value="60">60&times;</option>
+                    </select>
+
+                    <select id="heatmap-selection">
+                        <option value="none">No heatmap</option>
+                        <option value="position">Positions</option>
+                        <option value="speed">Speed</option>
+                        <option value="energy">Energy</option>
+                    </select>
+
+                    <input type="range" id="control-time" min="0" max="255" value="0" />
+
+                    <span id="playback-time">00:00</span>
+                </div>
+
+                <div id="vis-3d">
+                    <img src="aspectratio.png" />
+                    <canvas id="field-3d"></canvas>
+                </div>
+            </div>
+
+            <div id="stats-container">
+                <div id="teamStatsContainer">
+                    <div id="radarContainer" style="display:block">
+                        <div id="radarLegend"></div>
+                        <canvas id="radarChart" width="400" height="400"></canvas>
+                    </div>
+
+                    <div id="barContainer" style="display:block">
+                        <h4>Distance of a player to all others<h4>
+                        <canvas id="barChart" width="400" height="400"></canvas>
+                    </div>
+                </div>
+
+
+                <div id="playerStatsContainer">                    
+                    <div id="details">
+                        <table style="display:none" id="playerTable" cellspacing="0" cellpadding="3" >
+                            <tbody>
+                                <tr>
+                                    <td id="playerName"></td>
+                                </tr>
+                                <tr>
+                                    <td>Date of Birth:</td>
+                                    <td id="playerBirth" class="playerValue"> </td>
+                                </tr>
+                                <tr>
+                                    <td>Nationality:</td>
+                                    <td id="playerNation" class="playerValue"></td>
+                                </tr>
+                                <tr>
+                                    <td>Height:</td>
+                                    <td id="playerHeight" class="playerValue"></td>
+                                </tr>
+                                <tr>
+                                    <td>Weight:</td>
+                                    <td id="playerWeight" class="playerValue"></td>
+                                </tr>
+                                <tr>
+                                    <td>Position:</td>
+                                    <td id="playerPos" class="playerValue"></td>
+                                </tr>
+                                <tr>
+                                    <td>Squad Number:</td>
+                                    <td id="playerNumber" class="playerValue"></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="stats"></div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
+        <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
+        <script src="https://d3js.org/d3.v3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+
+        <script src="code2.js"></script>
+    </body>
+</html>
