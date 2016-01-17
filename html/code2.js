@@ -753,7 +753,7 @@ function playPositions() {
         var currentSec = Math.floor(currentFrame);
         if (currentSec != lastSec) {
             for (var i = 0; i < data.length; i++) {
-                if (data[i][COL_T] == currentSec) {
+                if (data[i][COL_T] == currentSec && playerDetails[data[i][COL_ID]]) {
                     // Ensure that players are always in the same order
                     currentData[data[i][COL_ID]] = data[i];
                 }
