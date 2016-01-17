@@ -19,7 +19,7 @@ html, body {
 
     font-family: Roboto;
     font-weight: 300;
-    font-size: 30px;
+    font-size: 15px;
     color: #1E539F;
 
     position: relative;
@@ -29,7 +29,7 @@ html, body {
 
 #contents {
     width: 100%;
-    height: calc(100% - 67px);
+    height: calc(100% - 50px);
 }
 
 #vis-player {
@@ -173,11 +173,12 @@ html, body {
 #player-stats-message {
     font-size: 20px;
     color: rgba(255, 255, 255, 0.4);
+    position: absolute;
 }
 
 #player-stats-container h1 {
-    margin: 20px 0 20px 0;
-    font-size: 20px;
+    margin: 10px 0 10px 0;
+    font-size: 15px;
     font-weight: 300;
     color: white;
 }
@@ -300,7 +301,7 @@ select {
 
 #stats-container {
     float: left;
-    height: 100%;
+    height: calc(100% - 60px);
     overflow: auto;
 }
 
