@@ -1,31 +1,77 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
+
         <title>Football Visualization</title>
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="style.css">
     </head>
-    
+
     <body>
-    
+        <div id="header">
+            <span class="fa fa-futbol-o"></span>
+            Football Match Visualization
+        </div>
 
-    <div id="container">
-        <H1 style="text-align:center"> Data Visualization Project 2015 - 2016</H1>
-        <div id="fieldVis">
-            
-            <div id="field-container">
-                <svg id="field"></svg>
+        <div id="contents">
+            <div id="team-info">
+                <p>
+                    <div class="logo-container">
+                        <img src="tromso.png" /><br />
+                        <span class="home-team">Tromsø</span>
+                    </div>
 
-                <div id="playback-bar">
-                    <input id="playback-button" type="button" value="Pause" />
+                    <span id="logo-seperator">vs.</span>
 
-                    <select id="playback-speed">
-                        <option value="1">1x</option>
-                        <option value="5">5x</option>
-                        <option value="15">15x</option>
-                        <option value="30">30x</option>
-                        <option value="60">60x</option>
+                    <div class="logo-container">
+                        <img src="tottenham.png" /><br />
+                        <span class="away-team">Tottenham Hotspur</span>
+                    </div>
+                </p>
+
+                <h1 style="margin-top: 40px">Team performance</h1>
+
+                <div id="radarContainer" style="display: block; margin-top: -20px">
+                    <canvas id="radarChart" width="300" height="300"></canvas>
+                </div>
+
+                <h1 style="margin-top: -10px; margin-bottom: 40px">Home team lineup</h1>
+
+                <ul>
+                    <li>Brad Friedel (GK)</li>
+                    <li class="position-back">Vlad Iulian Chiricheş</li>
+                    <li class="position-back">Michael Dawson</li>
+                    <li class="position-back">Zeki Fryers</li>
+                    <li class="position-back">Kyle Naughton</li>
+                    <li class="position-winger">Gylfi Sigurðsson</li>
+                    <li class="position-midfield">Mousa Dembélé</li>
+                    <li class="position-winger">Andros Townsend</li>
+                    <li class="position-winger">Nacer Chadli</li>
+                    <li class="position-midfield">Étienne Capoue</li>
+                    <li class="position-winger">Roberto Soldado</li>
+                </ul>
+            </div>
+
+            <div id="vis-player">
+                <div id="vis-2d">
+                    <img src="aspectratio.png" />
+                    <svg id="field"></svg>
+                </div>
+
+                <div id="vis-controls">
+                    <input type="checkbox" id="control-play" checked />
+                    <label class="fa fa-pause-circle" id="control-play-icon-on" for="control-play"></label>
+                    <label class="fa fa-play-circle" id="control-play-icon-off" for="control-play"></label>
+
+                    <select id="control-speed">
+                        <option value="1">1&times;</option>
+                        <option value="5">5&times;</option>
+                        <option value="15">15&times;</option>
+                        <option value="30">30&times;</option>
+                        <option value="60">60&times;</option>
                     </select>
 
                     <select id="heatmap-selection">
@@ -35,89 +81,80 @@
                         <option value="energy">Energy</option>
                     </select>
 
-                    <input id="playback-slider" type="range" min="0" max="100" value="0" />
+                    <input type="range" id="control-time" min="0" max="255" value="0" />
 
                     <span id="playback-time">00:00</span>
                 </div>
+
+                <div id="vis-3d">
+                    <img src="aspectratio.png" />
+                    <canvas id="field-3d"></canvas>
+                </div>
             </div>
-            <button type="button" onclick="disableSelection()">No Player Selection</button>
-            <div id="field3dcontainer">
-                <canvas id="field3d" width="575" height="360"></canvas>
+
+            <div id="stats-container">
+                <span id="player-stats-message">Select a player to view information.</span>
+
+                <div id="player-stats-container" style="visibility: hidden">
+                    <h1 style="margin-top: 0" id="player-name">Player details</h1>
+
+                    <div id="details">
+                        <table id="player-table" cellspacing="0" cellpadding="3">
+                            <tbody>
+                                <tr>
+                                    <td>Date of Birth:</td>
+                                    <td id="playerBirth" class="playerValue"> </td>
+                                </tr>
+                                <tr>
+                                    <td>Nationality:</td>
+                                    <td id="playerNation" class="playerValue"></td>
+                                </tr>
+                                <tr>
+                                    <td>Height:</td>
+                                    <td id="playerHeight" class="playerValue"></td>
+                                </tr>
+                                <tr>
+                                    <td>Weight:</td>
+                                    <td id="playerWeight" class="playerValue"></td>
+                                </tr>
+                                <tr>
+                                    <td>Position:</td>
+                                    <td id="playerPos" class="playerValue"></td>
+                                </tr>
+                                <tr>
+                                    <td>Squad Number:</td>
+                                    <td id="playerNumber" class="playerValue"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <img id="player-photo" />
+                    </div>
+
+                    <h1>Distance to other players</h1>
+
+                    <canvas id="barChart" width="600" height="400"></canvas>
+                    
+                    <h1>Performance throughout the match (
+                        <select id="graph-selection">
+                            <option value="Total_Distance">Total distance</option>
+                            <option value="Speed">Average speed</option>
+                            <option value="Energy_Consumed">Total energy</option>
+                        </select>
+                        )
+                    </h1>
+
+                    <div id="stats"></div>
+                </div>
             </div>
-        
         </div>
-
-        <div id="statsContainer">
-
-
-            <div id="teamStatsContainer">
-                
-                <div id="radarContainer" style="display:block">
-                    <div id="radarLegend"></div>
-                    <canvas id="radarChart" width="400" height="400"></canvas>
-                </div>
-
-                <div id="barContainer" style="display:block">
-                    <h4>Distance of a player to all others<h4>
-                    <canvas id="barChart" width="400" height="400"></canvas>
-                </div>
-
-            </div>
-
-
-            <div id="playerStatsContainer">
-                
-                <div id="details" >
-                    <table style="display:none" id="playerTable" cellspacing="0" cellpadding="3" >
-                        <tbody>
-                            <tr>
-                                <td id="playerName"></td>
-                            </tr>
-                            <tr>
-                                <td>Date of Birth:</td>
-                                <td id="playerBirth" class="playerValue"> </td>
-                            </tr>
-                            <tr>
-                                <td>Nationality:</td>
-                                <td id="playerNation" class="playerValue"></td>
-                            </tr>
-                            <tr>
-                                <td>Height:</td>
-                                <td id="playerHeight" class="playerValue"></td>
-                            </tr>
-                            <tr>
-                                <td>Weight:</td>
-                                <td id="playerWeight" class="playerValue"></td>
-                            </tr>
-                            <tr>
-                                <td>Position:</td>
-                                <td id="playerPos" class="playerValue"></td>
-                            </tr>
-                            <tr>
-                                <td>Squad Number:</td>
-                                <td id="playerNumber" class="playerValue"></td>
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div id="stats"></div>
-            
-            </div>
-
-        </div>
-
-        
-        
 
         <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
         <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js"></script>
         <script src="https://d3js.org/d3.v3.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
-        <script src="code.js"></script>
 
-    </div>
+        <script src="code.js"></script>
     </body>
 </html>
