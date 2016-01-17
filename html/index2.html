@@ -96,12 +96,11 @@
                 <span id="player-stats-message">Select a player to view information.</span>
 
                 <div id="player-stats-container" style="visibility: hidden">
-                    <div id="details" style="display: none">
-                        <table id="playerTable" cellspacing="0" cellpadding="3">
+                    <h1 style="margin-top: 0" id="player-name">Player details</h1>
+
+                    <div id="details">
+                        <table id="player-table" cellspacing="0" cellpadding="3">
                             <tbody>
-                                <tr>
-                                    <td id="playerName"></td>
-                                </tr>
                                 <tr>
                                     <td>Date of Birth:</td>
                                     <td id="playerBirth" class="playerValue"> </td>
@@ -130,7 +129,7 @@
                         </table>
                     </div>
 
-                    <h1 style="margin-top: 0">Distance of a player to all others</h1>
+                    <h1>Distance to other players</h1>
 
                     <canvas id="barChart" width="600" height="400"></canvas>
                     
