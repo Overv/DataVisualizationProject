@@ -1,210 +1,326 @@
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
+html, body {
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    overflow: hidden;
+
+    background: #23232D;
+
+    cursor: default;
 }
 
-.line {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
+#header {
+    background: #FAFAFA;
+
+    padding: 15px;
+
+    font-family: Roboto;
+    font-weight: 300;
+    font-size: 30px;
+    color: #1E539F;
+
+    position: relative;
+    z-index: 99;
+    box-shadow: 0px 0px 20px black;
 }
 
-.player text, .player circle {
-    cursor: pointer;
+#contents {
+    width: 100%;
+    height: calc(100% - 67px);
 }
 
-#container {
-    width:1400px;
-    margin:20px auto;
-    overflow:auto; 
-}
-
-#statsContainer{
-    float:left;
-    width:600px;
-    margin-left: 30px;
-}
-
-#playerStatsContainer{
-    clear:both;
-}
-
-#teamStatsContainer{
-    clear:both;
-}
-
-#fieldVis {
-    float:left;
-    width:600 px;
-}
-
-#field-container {
-    display: block;
+#vis-player {
     float: left;
+
+    height: 100%;
+}
+
+#vis-controls {
+    height: 30px;
+    padding: 10px;
+
+    background: #23232D;
+    color: white;
+
+    font-size: 28px;
+}
+
+#vis-2d {
+    height: calc(50% - 30px);
+    position: relative;
+}
+
+#vis-3d {
+    height: calc(50% - 30px);
+    position: relative;
+}
+
+#vis-2d img {
+    height: 100%;
+    visibility: hidden;
+}
+
+#vis-3d img {
+    height: 100%;
+    visibility: hidden;
+}
+
+#field, #field-3d {
+    width: 100%;
+    height: 100%;
+
+    left: 0;
+    top: 0;
+    position: absolute;
 }
 
 #field {
-    width: 575px;
-    height: 360px;
-    border: 1px solid black;
     background: url(layout.svg);
     background-size: cover;
 }
 
-
-
-
-
-table{
-    border-spacing:2px;
-    border-color: grey;
-    color:black;
-}
-
-#playerName{
-    text-align: left;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-#playerTable{
-    width:100%;
-    height: 100%;
-    margin:0 auto;
-    background-color: white;
-}
-
-.playerValue{
-    text-align: right;
-    font-weight:bold;
-    color: black;
-}
-
-div#details table td{
-    padding: 7px 4px 7px 0;
-    border-bottom: solid 1px #ccc;
-    vertical-align: top;
-}
-
-#details{
-    display: block;
-    float:left;
-    margin-left: 50px;
-    margin-right: 20px;
-    margin-bottom: 30px;
-    margin-top:20px;
-    padding: 0px;
-    width: 200px;
-    height: 300px;
-    background: white;
-    color: white;
-    font-family: sans-serif;
-    font-size: 12px;
-}
-
-#stats {
-    display: block;
-    float:left;
-    margin-left: 50px;
-    margin-right: 20px;
-    margin-bottom: 30px;
-    margin-top:20px;
-    padding: 0px;
-    width: 600px;
-    height: 300px;
-    background: white;
-    color: white;
-    font-family: sans-serif;
-    font-size: 12px;
-}
-
-#stats h1 {
-    margin: 0;
-    padding: 5px;
-    background: #4a4a4a;
-    font-family: Roboto;
-    font-weight: 300;
-    font-size: 18px;
-}
-
-#stats ul {
-    list-style: none;
-    padding: 0;
-}
-
-#stats li {
-    padding: 5px;
-}
-
-#stats li:nth-child(2) {
-    background: #444;
-}
-
-#playback-bar {
-    clear: both;
-
-    width: 575px;
-
-    border: 1px solid black;
-    background: #222;
-}
-
-#playback-slider {
-    width: 280px;
-
-    position: relative;
-    top: 3px;
-}
-
-#playback-button {
-    width: 60px;
-
-    position: relative;
-    top: -2px;
-
-    margin: 5px;
-
-    border: 1px solid white;
-    background: #222;
-    color: white;
+#field-3d {
+    background: black;
 }
 
 #playback-time {
-    display: inline-block;
-
-    padding: 5px;
-
-    color: white;
-    font-family: Roboto;
-    font-weight: normal;
-    font-size: 16px;
-
-    position: relative;
-    top: -2px;
-}
-
-#playback-bar select {
-    position: relative;
-    top: -2px;
-
-    border: 1px solid white;
-    background: #222;
-    color: white;
-}
-
-#field3d {
-    width: 575px;
-    height: 360px;
-
-    
-    margin-top: 20px;
-
-    border: 1px solid black;
-}
-
-text {
     user-select: none;
     -webkit-user-select: none;
-    -moz-user-select: none;
+}
+
+#team-info {
+    float: left;
+
+    width: 340px;
+    height: 100%;
+
+    padding: 10px;
+    padding-top: 20px;
+
+    background: #2C3137;
+
+    font-family: Roboto;
+    font-size: 16px;
+
+    color: white;
+
+    text-align: center;
+}
+
+.logo-container img {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.logo-container {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+#logo-seperator {
+    padding: 0 10px 0 10px;
+    vertical-align: middle;
+    font-size: 30px;
+}
+
+#team-info h1 {
+    margin: 0;
+
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.home-team {
+    color: #7BDCA2;
+}
+
+.away-team {
+    color: #DCDCDC;
+}
+
+#team-info ul {
+    padding: 0;
+}
+
+#team-info li {
+    list-style: none;
+    font-weight: 300;
+}
+
+.position-back {
+    color: rgb(215, 223, 1);
+}
+
+.position-winger {
+    color: red;
+}
+
+.position-midfield {
+    color: rgb(46, 100, 254);
+}
+
+#stats-container {
+    font-family: Roboto;
+    font-weight: 300;
+
+    padding: 30px;
+}
+
+#player-stats-message {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+#player-stats-container h1 {
+    margin: 20px 0 20px 0;
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
+}
+
+#player-table {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+#player-photo {
+    position: relative;
+    top: -165px;
+    left: 300px;
+
+    margin-bottom: -150px;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Play/pause button */
+
+input[type=checkbox] { display: none; }
+input[type=checkbox] ~ #control-play-icon-on { display: none; }
+input[type=checkbox] ~ #control-play-icon-off { display: inline-block; }
+input[type=checkbox]:checked ~ #control-play-icon-off { display: none; }
+input[type=checkbox]:checked ~ #control-play-icon-on { display: inline-block; }
+
+label {
+    cursor: pointer;
+}
+
+/* Playback slider */
+
+input[type=range] {
+    -webkit-appearance: none;
+    width: calc(100% - 270px);
+    cursor: pointer;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    input[type=range] {
+        position: relative;
+        top: -5px;
+        width: calc(100% - 255px);
+    }
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+    background: #1E539F;
+}
+
+input[type=range]::-moz-range-track {
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+    background: #1E539F;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    width: 8px;
+    height: 10px;
+    background: white;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 8px;
+    height: 10px;
+    background: white;
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+}
+
+input[type=range]::-ms-thumb {
+    width: 8px;
+    height: 10px;
+    background: white;
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+}
+
+select {
+    position: relative;
+    top: -4px;
+
+    background: #23232D;
+    color: white;
+    font-size: 18px;
+
+    border: none;
+    border-bottom: 1px dotted white;
+
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    cursor: pointer;
+
+    font-family: Roboto;
+    font-weight: 300;
+}
+
+#vis-controls span {
+    position: relative;
+    top: -3px;
+
+    font-weight: 300;
+    font-size: 20px;
+    font-family: Roboto;
+}
+
+#stats-container {
+    float: left;
+    height: 100%;
+    overflow: auto;
+}
+
+.player text, .player circle {
+    cursor: pointer;
+    
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Line chart */
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.8);
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
 }

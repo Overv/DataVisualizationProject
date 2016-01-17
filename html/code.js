@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 var FIELD_WIDTH = 105;
 var FIELD_HEIGHT = 68;
@@ -20,13 +20,16 @@ var DATA_URL = 'https://raw.githubusercontent.com/Overv/DataVisualizationProject
 
 var vis = d3.select('#field');
 
+var w = vis[0][0].offsetWidth;
+var h = vis[0][0].offsetHeight;
+
 var xScale = d3.scale.linear()
     .domain([0, FIELD_WIDTH])
-    .range([24, 550]);
+    .range([w * 0.0426, w * 0.9565]);
 
 var yScale = d3.scale.linear()
     .domain([0, FIELD_HEIGHT])
-    .range([350, 9]);
+    .range([h * 0.9722, h * 0.0264]);
 
 var x3DScale = d3.scale.linear()
     .domain([0, FIELD_WIDTH])
@@ -58,10 +61,10 @@ var playerDetails = {"1":{"name":"Zeki","sur":"Fryers","db":"9 Sep 1992 (Age 23)
                      "4":{"name":"Michael","sur":"Dawson","db":"18 Nov 1983 (Age 32)","nation":"England","height":"188 cm.","weight":"79 kg.","pos":"Center Back","shirtno":"5"},
                      "5":{"name":"Roberto","sur":"Soldado","db":"27 May 1985 (Age 30)","nation":"Spain","height":"176 cm.","weight":"73 kg.","pos":"Forward/Striker","shirtno":"9"},
                      "6":{"name":"Andros","sur":"Townsend","db":"16 Jul 1990 (Age 25)","nation":"England","height":"183 cm.","weight":"77 kg.","pos":"Right Winger","shirtno":"17"},
-                     "8":{"name":"Gylfi","sur":"Sigurdsson","db":"9 Sep 1989 (Age 26)","nation":"Iceland","height":"186 cm.","weight":"75 kg.","pos":"Left Winger","shirtno":"-"},
-                     "11":{"name":"Mousa","sur":"Dembele","db":"17 Jul 1987 (Age 29)","nation":"Belgium","height":"183 cm.","weight":"78 Kg.","pos":"Midfielder","shirtno":"19"},
-                     "12":{"name":"Naser","sur":"Chadli","db":"2 Sep 1989 (Age 26)","nation":"Belgium","height":"188 cm.","weight":"85 kg.","pos":"Attacking Midfielder","shirtno":"21"},
-                     "14":{"name":"Vlad lulian","sur":"Chiriches","db":"15 Nov 1989 (age 26)","nation":"Romania","height":"183 cm.","weight":"75 kg.","pos":"Center Back","shirtno":"6"},
+                     "8":{"name":"Gylfi","sur":"Sigurðsson","db":"9 Sep 1989 (Age 26)","nation":"Iceland","height":"186 cm.","weight":"75 kg.","pos":"Left Winger","shirtno":"-"},
+                     "11":{"name":"Mousa","sur":"Dembélé","db":"17 Jul 1987 (Age 29)","nation":"Belgium","height":"183 cm.","weight":"78 Kg.","pos":"Midfielder","shirtno":"19"},
+                     "12":{"name":"Nacer","sur":"Chadli","db":"2 Sep 1989 (Age 26)","nation":"Belgium","height":"188 cm.","weight":"85 kg.","pos":"Attacking Midfielder","shirtno":"21"},
+                     "14":{"name":"Vlad lulian","sur":"Chiricheş","db":"15 Nov 1989 (Age 26)","nation":"Romania","height":"183 cm.","weight":"75 kg.","pos":"Center Back","shirtno":"6"},
                     };
 
 //the values are percentages
@@ -96,8 +99,8 @@ var barData = {
     datasets: [
         {
             label: "Player Names",
-            fillColor: "rgba(245, 112, 139, 0.6)",
-            strokeColor: "rgba(245, 112, 139, 0.9)",
+            fillColor: "steelblue",
+            strokeColor: "#4F94CC",
             highlightFill: "rgba(220,220,220,0.75)",
             highlightStroke: "rgba(220,220,220,1)",
             data: [0, 0, 0, 0, 0, 0, 0, 0]
@@ -106,32 +109,34 @@ var barData = {
 };
 
 //Radar Code Chart.js
-var options={
-  legendTemplate :  "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"back,ground-color:<%=datasets[i].fillColor%>\"><%if(datasets[i].label){%><%=datasets[i].label%></span><%}%></li><%}%></ul>",
+var radarChartOptions={
   scaleOverride: true,
     scaleSteps: 10,
     scaleStepWidth: 10,
     scaleStartValue: 0,
-    animation: false
+    animation: false,
+    angleLineColor : "rgba(255, 255, 255, 0.3)",
+    pointLabelFontColor : "rgba(255, 255, 255, 0.8)",
+    scaleLineColor: "rgba(255, 255, 255, 0.3)"
   };
 
+var barChartOptions = {
+    animationSteps: 5,
+    scaleLineColor: "rgba(255, 255, 255, 0.8)",
+    scaleFontColor: "rgba(255, 255, 255, 0.8)"
+};
 
 // display the the radar chart
 var radarCanvas =document.getElementById("radarChart");
 var ctxr=radarCanvas.getContext("2d");
 var newChart = new Chart(ctxr);
-var radarChart = newChart.Radar(radarData,options);
+var radarChart = newChart.Radar(radarData,radarChartOptions);
 
 //display the bar chart 
 var barCanvas = document.getElementById("barChart");
 var ctxb = barCanvas.getContext("2d");
 var newChart1 = new Chart(ctxb);
-var barChart = newChart1.Bar(barData, {animationSteps: 5});
-
-
-
-var legend = radarChart.generateLegend();
-document.getElementById("radarLegend").innerHTML=legend;
+var barChart = newChart1.Bar(barData, barChartOptions);
 
 function updatePositions(data, instanttransition) {
     // Update data
@@ -143,7 +148,7 @@ function updatePositions(data, instanttransition) {
     playerGroups
         .transition()
         .ease('linear')
-        .duration(instanttransition ? 33 : (2000 / $('#playback-speed').val()))
+        .duration(instanttransition ? 33 : (2000 / $('#control-speed').val()))
         .attr('transform', function(d) { return 'translate(' + xScale(d[COL_XPOS]) + ', ' + yScale(d[COL_YPOS]) + ')'; })
         .attr('data-x', function(d) { return d[COL_XPOS]; })
         .attr('data-y', function(d) { return d[COL_YPOS]; })
@@ -203,15 +208,14 @@ function disableSelection(){
 	showPlayerStats(null);
 }
 
-function hideGraphs(){
-	d3.select("#barContainer").style("display","none");
-	d3.select("#playerStatsContainer").style("display","none");
-
+function hideGraphs() {
+    $('#player-stats-message').css('display', 'block');
+    $('#player-stats-container').css('visibility', 'hidden');
 }
 
-function showGraphs(){
-	d3.select("#barContainer").style("display","block");
-	d3.select("#playerStatsContainer").style("display","block");
+function showGraphs() {
+    $('#player-stats-message').css('display', 'none');
+	$('#player-stats-container').css('visibility', 'visible');
 }
 
 function playerPosText(noPlayer){
@@ -304,8 +308,6 @@ function distanceToOthers(tagid){
     }
     barChart.scale.xLabels=xLabels;
     barChart.update();
-
-
 }
 
 function showPlayerStats(tagid) {
@@ -336,34 +338,13 @@ function showPlayerStats(tagid) {
         // TODO
         //d3.select("svg.parent").selectAll("*").remove();
         d3.select("#stats").remove();
-        d3.select("#playerStatsContainer")
+        d3.select("#player-stats-container")
            .append("div")
            .attr("id","stats");
 
-        //Append a selection box to change between total distance 
-        // and speed of the player per minute
-        //d3.select("#selList").node().value == "Total_Distance"
-        var stats = d3.select("#stats")
-        stats.append("select")
-             .attr("id","selList")
-             .on("click",function(){changeGraph(tagid);});
-        
-        var list = d3.select("#selList");
-
-        list.append("option")
-            .attr("value","Total_Distance")
-            .text("Total_Distance");
-
-        list.append("option")
-            .attr("value","Speed")
-            .text("Speed");
-
-        list.append("option")
-            .attr("value","Energy_Consumed")
-            .text("Energy_Consumed");
-
-
-        
+        $('#graph-selection').click(function() {
+            changeGraph(tagid)
+        });
 
         //the option of the user in the selection box
         changeGraph(tagid);
@@ -389,14 +370,16 @@ function showPlayerStats(tagid) {
 // a function to update the player's details in the card
 function updateCard(tagid){
     if (tagid) {
-        d3.select("#playerTable").style("display","block");
-        d3.select("#playerName").text(playerDetails[tagid].name+" "+playerDetails[tagid].sur);
+        d3.select("#player-table").style("display","block");
+        d3.select("#player-name").text(playerDetails[tagid].name+" "+playerDetails[tagid].sur);
         d3.select("#playerBirth").text(playerDetails[tagid].db);
         d3.select("#playerNation").text(playerDetails[tagid].nation);
         d3.select("#playerHeight").text(playerDetails[tagid].height);
         d3.select("#playerWeight").text(playerDetails[tagid].weight);
         d3.select("#playerPos").text(playerDetails[tagid].pos);
         d3.select("#playerNumber").text(playerDetails[tagid].shirtno);
+
+        $('#player-photo').attr('src', 'players/' + tagid + '.jpg');
     }
 }
 
@@ -409,7 +392,7 @@ function changeGraph(tagid){
     var margin = {top:20, right:20, bottom:30, left:50},
         width=600 - margin.left-margin.right,
         height=300 - margin.top - margin.bottom;
-    var option = d3.select("#selList").node().value;
+    var option = d3.select("#graph-selection").node().value;
     
     var playerIdData = data.filter(function (row) {return row[COL_ID]==tagid});
     
@@ -508,32 +491,36 @@ function changeGraph(tagid){
             .attr("class","x axis")
             .attr("transform","translate(0,"+height+")")
             .call(xAxis)
+            .attr('stroke', 'rgba(255, 255, 255, 0.8)')
             .append("text")
             .attr("x",510)
             .attr("dy","-8px")
             .style("text-anchor","end")
+            .attr('stroke', 'rgba(255, 255, 255, 0.8)')
             .text("Minute");
 
     lineSvg.append("g")
             .attr("class","y axis")
             .call(yAxis)
+            .attr('stroke', 'rgba(255, 255, 255, 0.8)')
             .append("text")
             .attr("transform","rotate(-90)")
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor","end")
-            //.text("Total_Distance");
+            .attr('stroke', 'rgba(255, 255, 255, 0.8)')
             .text(option);
 
     lineSvg.append("path")
            .datum(playerData)
            .attr("class","line")
-           .attr("d",line);
+           .attr("d",line)
+           .attr('stroke', 'rgba(255, 255, 255, 0.8)');
 
     focus.append("circle")
          .attr("class","y")
          .style("fill","none")
-         .style("stroke","blue")
+         .style("stroke","rgba(255, 255, 255, 0.5)")
          .attr("r",4);
 
     lineSvg.append("rect")
@@ -567,7 +554,7 @@ function changeGraph(tagid){
     //append the x dashed line
     focus.append("line")
         .attr("class", "xdashed")
-        .style("stroke", "blue")
+        .style("stroke", "rgba(255, 255, 255, 0.5)")
         .style("stroke-dasharray", "3,3")
         .style("opacity", 0.5)
         .attr("y1", 0)
@@ -576,7 +563,7 @@ function changeGraph(tagid){
     // append the y dashed line
     focus.append("line")
         .attr("class", "ydashed")
-        .style("stroke", "blue")
+        .style("stroke", "rgba(255, 255, 255, 0.5)")
         .style("stroke-dasharray", "3,3")
         .style("opacity", 0.5)
         .attr("x1", width)
@@ -586,27 +573,15 @@ function changeGraph(tagid){
     focus.append("text")
         .attr("class", "y1")
         .style("stroke", "white")
-        .style("stroke-width", "3.5px")
         .style("opacity", 0.8)
-        .attr("dx", 8)
-        .attr("dy", "-.3em");
-    
-    focus.append("text")
-        .attr("class", "y2")
         .attr("dx", 8)
         .attr("dy", "-.3em");
 
     // place the y value at the intersection
     focus.append("text")
         .attr("class", "y3")
-        .style("stroke", "white")
-        .style("stroke-width", "3.5px")
+        .style("fill", "white")
         .style("opacity", 0.8)
-        .attr("dx", 8)
-        .attr("dy", "1em");
-
-    focus.append("text")
-        .attr("class", "y4")
         .attr("dx", 8)
         .attr("dy", "1em");
 
@@ -618,22 +593,10 @@ function changeGraph(tagid){
                            yStatScale(d[1]) + ")")
           .text(d[0]);
 
-    focus.select("text.y2")
-         .attr("transform",
-            "translate(" + xStatScale(d[0]) + "," +
-                           yStatScale(d[1]) + ")")
-         .text(d[0]);
-
     //place the text for the x values
     focus.select("text.y3")
          .attr("transform",
           "translate(" + xStatScale(d[0]) + "," +
-                           yStatScale(d[1]) + ")")
-         .text(d[1]);
-
-    focus.select("text.y4")
-         .attr("transform",
-            "translate(" + xStatScale(d[0]) + "," +
                            yStatScale(d[1]) + ")")
          .text(d[1]);
 
@@ -690,7 +653,7 @@ $.get(DATA_URL, function(csv) {
 });
 
 function updatePlaybackSlider(otherSlider) {
-    var sliderEl = $('#playback-slider');
+    var sliderEl = $('#control-time');
 
     if (lastFrame === undefined) {
         firstFrame = data[0][COL_T];
@@ -712,14 +675,8 @@ function updatePlaybackSlider(otherSlider) {
             updatePlaybackTime();
         });
 
-        $('#playback-button').click(function() {
-            paused = !paused;
-
-            if (paused) {
-                $(this).val('Play');
-            } else {
-                $(this).val('Pause');
-            }
+        $('label[for="control-play"]').click(function() {
+            paused = $('#control-play').prop('checked');
         });
     }
 
@@ -758,7 +715,7 @@ function playPositions() {
         var currentSec = Math.floor(currentFrame);
         if (currentSec != lastSec) {
             for (var i = 0; i < data.length; i++) {
-                if (data[i][COL_T] == currentSec) {
+                if (data[i][COL_T] == currentSec && playerDetails[data[i][COL_ID]]) {
                     // Ensure that players are always in the same order
                     currentData[data[i][COL_ID]] = data[i];
                 }
@@ -770,7 +727,7 @@ function playPositions() {
                 }
             }
 
-            if (selectedPlayer!=null) {
+            if (selectedPlayer) {
                 distanceToOthers(selectedPlayer);
             }
 
@@ -779,20 +736,21 @@ function playPositions() {
         }
 
         if (!draggingSlider && !paused) {
-            lastSec = currentSec;
-            currentFrame += $('#playback-speed').val() / 60;
+            currentFrame += $('#control-speed').val() / 60;
             currentFrame = Math.min(currentFrame, lastFrame);
         } else if (paused) {
             updatePositions(currentData, true);
         }
+
+        lastSec = currentSec;
     }, UPDATE_INTERVAL_MS);
 }
 
 function init3DField() {
-    var canvas = $('#field3d')[0];
+    var canvas = $('#field-3d')[0];
 
     var renderer = new THREE.WebGLRenderer({canvas: canvas});
-    renderer.setSize(575, 360);
+    renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
     renderer.shadowMap.enabled = true;
 
     var scene = new THREE.Scene();
@@ -891,8 +849,8 @@ function init3DField() {
                         })();
 
                         $(canvas).mousemove(function(event) {
-                            renderer.mouseX = event.pageX - this.offsetLeft;
-                            renderer.mouseY = event.pageY - this.offsetTop;
+                            renderer.mouseX = event.pageX - $(this).offset().left;
+                            renderer.mouseY = event.pageY - $(this).offset().top;
                         });
 
                         $(canvas).click(function() {
