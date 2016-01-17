@@ -93,17 +93,11 @@
             </div>
 
             <div id="stats-container">
-                <div id="teamStatsContainer">
-                    <div id="barContainer" style="display:block">
-                        <h4>Distance of a player to all others<h4>
-                        <canvas id="barChart" width="400" height="400"></canvas>
-                    </div>
-                </div>
+                <span id="player-stats-message">Select a player to view information.</span>
 
-
-                <div id="playerStatsContainer">                    
-                    <div id="details">
-                        <table style="display:none" id="playerTable" cellspacing="0" cellpadding="3" >
+                <div id="player-stats-container" style="visibility: hidden">
+                    <div id="details" style="display: none">
+                        <table id="playerTable" cellspacing="0" cellpadding="3">
                             <tbody>
                                 <tr>
                                     <td id="playerName"></td>
@@ -132,11 +126,23 @@
                                     <td>Squad Number:</td>
                                     <td id="playerNumber" class="playerValue"></td>
                                 </tr>
-
                             </tbody>
                         </table>
                     </div>
+
+                    <h1 style="margin-top: 0">Distance of a player to all others</h1>
+
+                    <canvas id="barChart" width="600" height="400"></canvas>
                     
+                    <h1>Performance throughout the match (
+                        <select id="graph-selection" style="background: #2C3137">
+                            <option value="Total_Distance">Total distance</option>
+                            <option value="Speed">Average speed</option>
+                            <option value="Energy_Consumed">Total energy</option>
+                        </select>
+                        )
+                    </h1>
+
                     <div id="stats"></div>
                 </div>
             </div>
