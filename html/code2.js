@@ -370,8 +370,8 @@ function showPlayerStats(tagid) {
 // a function to update the player's details in the card
 function updateCard(tagid){
     if (tagid) {
-        d3.select("#playerTable").style("display","block");
-        d3.select("#playerName").text(playerDetails[tagid].name+" "+playerDetails[tagid].sur);
+        d3.select("#player-table").style("display","block");
+        d3.select("#player-name").text(playerDetails[tagid].name+" "+playerDetails[tagid].sur);
         d3.select("#playerBirth").text(playerDetails[tagid].db);
         d3.select("#playerNation").text(playerDetails[tagid].nation);
         d3.select("#playerHeight").text(playerDetails[tagid].height);
