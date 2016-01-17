@@ -115,7 +115,10 @@ var options={
     scaleSteps: 10,
     scaleStepWidth: 10,
     scaleStartValue: 0,
-    animation: false
+    animation: false,
+    angleLineColor : "rgba(255, 255, 255, 0.3)",
+    pointLabelFontColor : "rgba(255, 255, 255, 0.8)",
+    scaleLineColor: "rgba(255, 255, 255, 0.3)"
   };
 
 
@@ -130,11 +133,6 @@ var barCanvas = document.getElementById("barChart");
 var ctxb = barCanvas.getContext("2d");
 var newChart1 = new Chart(ctxb);
 var barChart = newChart1.Bar(barData, {animationSteps: 5});
-
-
-
-var legend = radarChart.generateLegend();
-document.getElementById("radarLegend").innerHTML=legend;
 
 function updatePositions(data, instanttransition) {
     // Update data

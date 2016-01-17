@@ -13,14 +13,18 @@ html, body {
 }
 
 #header {
-    background: #23232D;
+    background: #FAFAFA;
 
     padding: 15px;
 
     font-family: Roboto;
     font-weight: 300;
     font-size: 30px;
-    color: white;
+    color: #1E539F;
+
+    position: relative;
+    z-index: 99;
+    box-shadow: 0px 0px 20px black;
 }
 
 #contents {
@@ -85,6 +89,77 @@ html, body {
 #playback-time {
     user-select: none;
     -webkit-user-select: none;
+}
+
+#team-info {
+    float: left;
+
+    width: 340px;
+    height: 100%;
+
+    padding: 10px;
+    padding-top: 20px;
+
+    font-family: Roboto;
+    font-size: 16px;
+
+    background: #2C3137;
+    color: white;
+
+    text-align: center;
+}
+
+.logo-container img {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.logo-container {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+#logo-seperator {
+    padding: 0 10px 0 10px;
+    vertical-align: middle;
+    font-size: 30px;
+}
+
+#team-info h1 {
+    margin: 0;
+
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.home-team {
+    color: #7BDCA2;
+}
+
+.away-team {
+    color: #DCDCDC;
+}
+
+#team-info ul {
+    padding: 0;
+}
+
+#team-info li {
+    list-style: none;
+    font-weight: 300;
+}
+
+.position-back {
+    color: rgb(215, 223, 1);
+}
+
+.position-winger {
+    color: red;
+}
+
+.position-midfield {
+    color: rgb(46, 100, 254);
 }
 
 /* Play/pause button */
