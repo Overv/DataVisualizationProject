@@ -725,7 +725,7 @@ function playPositions() {
                 }
             }
 
-            if (selectedPlayer!=null) {
+            if (selectedPlayer) {
                 distanceToOthers(selectedPlayer);
             }
 
@@ -734,12 +734,13 @@ function playPositions() {
         }
 
         if (!draggingSlider && !paused) {
-            lastSec = currentSec;
             currentFrame += $('#control-speed').val() / 60;
             currentFrame = Math.min(currentFrame, lastFrame);
         } else if (paused) {
             updatePositions(currentData, true);
         }
+
+        lastSec = currentSec;
     }, UPDATE_INTERVAL_MS);
 }
 
