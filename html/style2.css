@@ -186,6 +186,16 @@ html, body {
     color: rgba(255, 255, 255, 0.8);
 }
 
+#player-photo {
+    position: relative;
+    top: -165px;
+    left: 300px;
+
+    margin-bottom: -150px;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
 /* Play/pause button */
 
 input[type=checkbox] { display: none; }
@@ -296,6 +306,9 @@ select {
 
 .player text, .player circle {
     cursor: pointer;
+    
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* Line chart */
