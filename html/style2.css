@@ -102,7 +102,7 @@ html, body {
 
     font-family: Roboto;
     font-size: 16px;
-    
+
     color: white;
 
     text-align: center;
@@ -159,6 +159,25 @@ html, body {
 
 .position-midfield {
     color: rgb(46, 100, 254);
+}
+
+#stats-container {
+    font-family: Roboto;
+    font-weight: 300;
+
+    padding: 30px;
+}
+
+#player-stats-message {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+#player-stats-container h1 {
+    margin: 20px 0 20px 0;
+    font-size: 20px;
+    font-weight: 300;
+    color: white;
 }
 
 /* Play/pause button */
@@ -233,7 +252,7 @@ input[type=range]::-ms-thumb {
     cursor: pointer;
 }
 
-#vis-controls select {
+select {
     position: relative;
     top: -4px;
 
@@ -267,7 +286,6 @@ input[type=range]::-ms-thumb {
     float: left;
     height: 100%;
     overflow: auto;
-    background: #FAFAFA;
 }
 
 .player text, .player circle {
@@ -279,7 +297,7 @@ input[type=range]::-ms-thumb {
 .axis path,
 .axis line {
     fill: none;
-    stroke: #000;
+    stroke: rgba(255, 255, 255, 0.8);
 }
 
 .line {
