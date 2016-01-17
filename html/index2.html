@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8">
+
         <title>Football Visualization</title>
 
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700">
@@ -15,6 +17,44 @@
         </div>
 
         <div id="contents">
+            <div id="team-info">
+                <p>
+                    <div class="logo-container">
+                        <img src="tromso.png" /><br />
+                        <span class="home-team">Tromsø</span>
+                    </div>
+
+                    <span id="logo-seperator">vs.</span>
+
+                    <div class="logo-container">
+                        <img src="tottenham.png" /><br />
+                        <span class="away-team">Tottenham Hotspur</span>
+                    </div>
+                </p>
+
+                <h1 style="margin-top: 40px">Team performance</h1>
+
+                <div id="radarContainer" style="display: block; margin-top: -20px">
+                    <canvas id="radarChart" width="300" height="300"></canvas>
+                </div>
+
+                <h1 style="margin-top: -10px; margin-bottom: 40px">Home team lineup</h1>
+
+                <ul>
+                    <li>Brad Friedel (GK)</li>
+                    <li class="position-back">Vlad Iulian Chiricheş</li>
+                    <li class="position-back">Michael Dawson</li>
+                    <li class="position-back">Zeki Fryers</li>
+                    <li class="position-back">Kyle Naughton</li>
+                    <li class="position-winger">Gylfi Sigurðsson</li>
+                    <li class="position-midfield">Mousa Dembélé</li>
+                    <li class="position-winger">Andros Townsend</li>
+                    <li class="position-winger">Nacer Chadli</li>
+                    <li class="position-midfield">Étienne Capoue</li>
+                    <li class="position-winger">Roberto Soldado</li>
+                </ul>
+            </div>
+
             <div id="vis-player">
                 <div id="vis-2d">
                     <img src="aspectratio.png" />
@@ -54,11 +94,6 @@
 
             <div id="stats-container">
                 <div id="teamStatsContainer">
-                    <div id="radarContainer" style="display:block">
-                        <div id="radarLegend"></div>
-                        <canvas id="radarChart" width="400" height="400"></canvas>
-                    </div>
-
                     <div id="barContainer" style="display:block">
                         <h4>Distance of a player to all others<h4>
                         <canvas id="barChart" width="400" height="400"></canvas>
