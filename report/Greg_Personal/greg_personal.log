@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.11.9)  14 JAN 2016 14:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2016.1.15)  25 JAN 2016 16:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -546,18 +546,18 @@ Package rerunfilecheck Info: File `greg_personal.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 83.
  ) 
 Here is how much of TeX's memory you used:
- 9521 strings out of 495025
- 142704 string characters out of 6181515
- 282347 words of memory out of 5000000
+ 9531 strings out of 495025
+ 142784 string characters out of 6181515
+ 281347 words of memory out of 5000000
  12514 multiletter control sequences out of 15000+600000
- 34750 words of font info for 102 fonts, out of 8000000 for 9000
+ 35321 words of font info for 109 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 30i,7n,40p,786b,333s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 30i,7n,40p,717b,333s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/fpl/fplrc8a.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/
 urw/palatino/uplr8a.pfb>
-Output written on greg_personal.pdf (2 pages, 91848 bytes).
+Output written on greg_personal.pdf (2 pages, 91226 bytes).
 PDF statistics:
  56 PDF objects out of 1000 (max. 8388607)
  42 compressed objects within 1 object stream
